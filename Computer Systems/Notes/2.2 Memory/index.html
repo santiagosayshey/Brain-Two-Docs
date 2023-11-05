@@ -1,0 +1,1143 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../2.1%20Logic%20Gates/">
+      
+      
+        <link rel="next" href="../3.1%20Machine%20Language/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>2.2 Memory - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#memory-devices" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2.2 Memory
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#memory-devices" class="md-nav__link">
+    Memory Devices
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Devices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flip-flops" class="md-nav__link">
+    Flip Flops
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ok-but-how-do-we-store-memory" class="md-nav__link">
+    Ok, But How Do We Store Memory?
+  </a>
+  
+    <nav class="md-nav" aria-label="Ok, But How Do We Store Memory?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-flip-flops" class="md-nav__link">
+    Data Flip Flops
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers" class="md-nav__link">
+    Registers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-access-memory" class="md-nav__link">
+    Random Access Memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#counter" class="md-nav__link">
+    Counter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-do-we-implement-this-with-logic-gates" class="md-nav__link">
+    How Do We Implement This With Logic Gates?
+  </a>
+  
+    <nav class="md-nav" aria-label="How Do We Implement This With Logic Gates?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dffs" class="md-nav__link">
+    DFFs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers_1" class="md-nav__link">
+    Registers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ram" class="md-nav__link">
+    RAM
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#memory-devices" class="md-nav__link">
+    Memory Devices
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Devices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flip-flops" class="md-nav__link">
+    Flip Flops
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ok-but-how-do-we-store-memory" class="md-nav__link">
+    Ok, But How Do We Store Memory?
+  </a>
+  
+    <nav class="md-nav" aria-label="Ok, But How Do We Store Memory?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-flip-flops" class="md-nav__link">
+    Data Flip Flops
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers" class="md-nav__link">
+    Registers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-access-memory" class="md-nav__link">
+    Random Access Memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#counter" class="md-nav__link">
+    Counter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-do-we-implement-this-with-logic-gates" class="md-nav__link">
+    How Do We Implement This With Logic Gates?
+  </a>
+  
+    <nav class="md-nav" aria-label="How Do We Implement This With Logic Gates?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dffs" class="md-nav__link">
+    DFFs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers_1" class="md-nav__link">
+    Registers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ram" class="md-nav__link">
+    RAM
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>2.2 Memory</h1>
+
+<div><ul>
+<li>Through memory, we can store the results of the operations we completed using logic</li>
+<li>This is done using memory chips, as opposed to logic chips<ul>
+<li>Are sequential - meaning they rely on outputs that have been processed prior</li>
+</ul>
+</li>
+<li>To do this, we must first model the progression of time using a clock and binary signals defined as <em>tick and tock</em><ul>
+<li>The time between a tick and the end of a tock is called a <em>cycle</em>, and these cycles are used to regulate the operations of the memory chips</li>
+</ul>
+</li>
+</ul>
+<h2 id="memory-devices">Memory Devices</h2>
+<ul>
+<li>Maintain state of variables</li>
+<li>To maintain state and respond to changes, we use a clock and an elementary, time dependant logic gate that can alternate between states that represent 1 and 0 (called a DFF for data flip flop)</li>
+<li>These DFFs can be used to create 1 bit registers (which can store 1 bit of information) and how n registers can be combined to create an n bit register</li>
+<li>These registers are then combined to make RAM!</li>
+</ul>
+<h3 id="flip-flops">Flip Flops</h3>
+<ul>
+<li>Memory chips store information over time</li>
+<li>DFFs take in a single bit of data and output a single bit of data as well as mirror a clock input</li>
+<li>Together, the data and clock inputs enable the DFF to output the input value at the end of each cycle</li>
+<li>We can see that the output cycle mirrors the previous input cycle (its shifted one to the right)</li>
+</ul>
+<p><img alt="figure_3.3" src="../../../assets/figure_3.3.png"></p>
+<h2 id="ok-but-how-do-we-store-memory">Ok, But How Do We Store Memory?</h2>
+<ul>
+<li>First need to understand the levels of abstraction:<ul>
+<li>Data Flip Flops (DFFs)</li>
+<li>Registers (Based on DFFs)</li>
+<li>RAM (Based on registers)</li>
+<li>Counters (Based on registers)</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-flip-flops">Data Flip Flops</h3>
+<ul>
+<li>Has a single bit data input, single bit data output, a clock input and time dependant behaviour , i.e. out(t) = in(t-1)<ul>
+<li>This behaviour is just saying the output mirrors the input exactly one cycle after it occurs</li>
+</ul>
+</li>
+<li>If we put a one bit value in the DFFs input, the DFF's state will be set to this value and the DFF's output will emit it in the cycle</li>
+</ul>
+<h3 id="registers">Registers</h3>
+<ul>
+<li>We need a single bit register named <em>Bit</em> and a 16 bit register named <em>Register</em></li>
+<li>The single bit register stores a single bit of information over time<ul>
+<li>It has two inputs - one to allow for write changes, and another that carries data to be input</li>
+<li>1 Output that emits the current state</li>
+<li>Compared to a data flip flop, this allows some information to be 'saved' and not overwritten every cycle. It will store this value until we enable the write input and put some different input into it</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_3.5" src="../../../assets/figure_3.5.png"></p>
+<ul>
+<li>The 16 bit register works exactly the same but can store 16 bit values</li>
+</ul>
+<h3 id="random-access-memory">Random Access Memory</h3>
+<ul>
+<li>Combines n Registers</li>
+<li>By specifying an address (a number from 0 to n-1), each register can be selected and made available for instantaneous read / write operations</li>
+</ul>
+<p><img alt="figure_3.7" src="../../../assets/figure_3.7.png"></p>
+<ul>
+<li>Read contents by setting the address input to m</li>
+<li>Write value <em>V</em> to a register <em>M</em> and set the load bit to 1 ( will only output V on the next cycle onwards )</li>
+</ul>
+<h3 id="counter">Counter</h3>
+<ul>
+<li>Increments its own value by 1 every cycle</li>
+<li>Four inputs:<ul>
+<li>inc == true, allows the counter to increment</li>
+<li>reset == true, resets the current value to 0</li>
+<li>in - value of V</li>
+<li>load == true, set the value to in</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_3.8" src="../../../assets/figure_3.8.png"></p>
+<h2 id="how-do-we-implement-this-with-logic-gates">How Do We Implement This With Logic Gates?</h2>
+<h3 id="dffs">DFFs</h3>
+<ul>
+<li>Abstracted away since it's quite complicated to implement via only NAND</li>
+</ul>
+<h3 id="registers_1">Registers</h3>
+<ul>
+<li>Route the output of a DFF into a mux gate along with another input (the thing you want to store)</li>
+<li>The load bit can be used as the selector on the mux gate (if we set the load bit to 1, it will funnel the input into the DFF and store it, if we set it to 0, it will store the DFFs previous output)<ul>
+<li><em>if load, set the register to a new value, else set it to the previously stored value</em></li>
+</ul>
+</li>
+<li>To form an n-bit register, we form an array of n Bit chips</li>
+</ul>
+<p><img alt="figure_3.9" src="../../../assets/figure_3.9.png"></p>
+<h3 id="ram">RAM</h3>
+<ul>
+<li>Combine a multitude of n-bit registers</li>
+</ul>
+<p><img alt="figure_wo_caption_3.1" src="../../../assets/Images/figure_wo_caption_3.1.png"></p>
+<p>A register
+- sel comes from "or" of first destination bit "d1" and "not" of leftmost bit</p></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

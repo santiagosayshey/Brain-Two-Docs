@@ -1,0 +1,1306 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../10.1%20Compiler%20Code%20Generation/">
+      
+      
+        <link rel="next" href="../2.1%20Logic%20Gates/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>11.1 Signals & Caching - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-hack-computer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              11.1 Signals & Caching
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-hack-computer" class="md-nav__link">
+    The HACK Computer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signal-propagation-what-is-the-limitation-of-clock-speed" class="md-nav__link">
+    Signal Propagation - What is the limitation of clock speed?
+  </a>
+  
+    <nav class="md-nav" aria-label="Signal Propagation - What is the limitation of clock speed?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-power-wall" class="md-nav__link">
+    The Power Wall
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-can-be-done" class="md-nav__link">
+    What Can Be Done?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slow-memory" class="md-nav__link">
+    Slow Memory:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-world-scenario-with-slow-memory" class="md-nav__link">
+    Real-world Scenario with Slow Memory:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-hierarchies" class="md-nav__link">
+    Memory Hierarchies
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Hierarchies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory-caching-hardware-implemented" class="md-nav__link">
+    Memory Caching - Hardware Implemented
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-hierarchies_1" class="md-nav__link">
+    Memory Hierarchies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-caching" class="md-nav__link">
+    Benefits of Caching
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+    <nav class="md-nav" aria-label="Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-hack-computer" class="md-nav__link">
+    The HACK Computer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signal-propagation-what-is-the-limitation-of-clock-speed" class="md-nav__link">
+    Signal Propagation - What is the limitation of clock speed?
+  </a>
+  
+    <nav class="md-nav" aria-label="Signal Propagation - What is the limitation of clock speed?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-power-wall" class="md-nav__link">
+    The Power Wall
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-can-be-done" class="md-nav__link">
+    What Can Be Done?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slow-memory" class="md-nav__link">
+    Slow Memory:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-world-scenario-with-slow-memory" class="md-nav__link">
+    Real-world Scenario with Slow Memory:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-hierarchies" class="md-nav__link">
+    Memory Hierarchies
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Hierarchies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory-caching-hardware-implemented" class="md-nav__link">
+    Memory Caching - Hardware Implemented
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-hierarchies_1" class="md-nav__link">
+    Memory Hierarchies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-caching" class="md-nav__link">
+    Benefits of Caching
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+    <nav class="md-nav" aria-label="Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>11.1 Signals & Caching</h1>
+
+<div><h2 id="the-hack-computer">The HACK Computer</h2>
+<ul>
+<li>64KB of separate read only instruction memory</li>
+<li>32KB + 16KB + 2B of separate read / write data memory<ul>
+<li>32KB for RAM</li>
+<li>16KB for screen</li>
+<li>2B for I/O</li>
+<li>Instructions are 1 word - 16 bits or 2 bytes</li>
+</ul>
+</li>
+<li>The entire machine runs off a <strong>single clock signal</strong></li>
+<li>All instructions take exactly the same amount of time to execute</li>
+<li>A lot of embedded systems may be structured like this</li>
+</ul>
+<p><img alt="Pasted image 20231017113441" src="../../../assets/Pasted%20image%2020231017113441.png"></p>
+<h2 id="signal-propagation-what-is-the-limitation-of-clock-speed">Signal Propagation - What is the limitation of clock speed?</h2>
+<ul>
+<li>The clock must not tick again until propagation completes<ul>
+<li>The output of every gate needs time to get to the next gate</li>
+<li>Every gate needs time to respond to it's inputs</li>
+<li>The longest path through the machine must be able to complete</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231017114054" src="../../../assets/Pasted%20image%2020231017114054.png"></p>
+<ul>
+<li>The longest path is <em>very</em> long<ol>
+<li>The PC must send a new address to instruction memory</li>
+<li>Only then can a new instruction be used to change control signals</li>
+<li>Only then can the correct inputs reach the ALU</li>
+<li>Only then can the correct output leave the ALU</li>
+<li>Only then can a Jump be evaluated</li>
+<li>Only then is the new value of the PC known</li>
+</ol>
+</li>
+</ul>
+<p><img alt="Pasted image 20231017114758" src="../../../assets/Pasted%20image%2020231017114758.png"></p>
+<ul>
+<li>Until propagation completes, bad things appear to happen<ul>
+<li>Wrong data being read from memory</li>
+<li>Wrong data being written to the wrong memory address</li>
+<li>The wrong values flowing through multiplexers</li>
+<li>The wrong address being written to PC</li>
+<li>The wrong values being written to the A and D registers</li>
+</ul>
+</li>
+<li>Why does the computer still work?<ul>
+<li>Because the wrong values are never saved!</li>
+<li>Memory, PC, A and D not change until  the next clock tick</li>
+</ul>
+</li>
+</ul>
+<h3 id="the-power-wall">The Power Wall</h3>
+<ul>
+<li>
+<p>Switching consumes power</p>
+<ul>
+<li>If the outputs of chips change, power is consumed</li>
+<li>Even if externally there is no change, internal changes can occur</li>
+<li>Careful routing of wires to minimise changes can save power</li>
+</ul>
+</li>
+<li>
+<p>The overall power consumption of a processor approximates:
+$$
+P = \frac{1}{2} \cdot C \cdot V^2 \cdot F
+$$</p>
+</li>
+<li>Power consumption performance challenges:<ul>
+<li>There is a practical limit to how much power can be used</li>
+<li>Capacitive load reduction requires new manufacturing processes</li>
+<li>Voltage reductions may be nearing their limits</li>
+<li>Removing the generated can be expensive</li>
+<li>We want lower power consumption</li>
+</ul>
+</li>
+</ul>
+<h3 id="what-can-be-done">What Can Be Done?</h3>
+<ul>
+<li>Shorten the longest path<ul>
+<li>More efficient adders<ul>
+<li>Our 16 bit adder requires a signal to traverse 32 gates</li>
+<li>Carry look ahead could reduce this to 5 gates</li>
+<li>A 16 bit multiplier could be implemented with a 20 gate delay</li>
+</ul>
+</li>
+<li>A shorter longest path may allow a shorter clock cycle / faster clock</li>
+<li>But a faster clock means more power consumption</li>
+</ul>
+</li>
+<li>Split the processor into smaller parts linked by registers<ul>
+<li>Pipelining</li>
+</ul>
+</li>
+<li>Use separate clocks for different components<ul>
+<li>Processor</li>
+<li>Memory</li>
+<li>I/O</li>
+</ul>
+</li>
+</ul>
+<h3 id="slow-memory">Slow Memory:</h3>
+<ul>
+<li><strong>Hypothetical Scenario</strong>: Imagine we replace the RAM in our Hack computer with a new type that's very slow—it takes 500 clock cycles to read from or write to it. This isn't great for performance because it's slow to respond, but it's inexpensive.</li>
+<li><strong>Ready Signal</strong>: This new RAM has a "ready" signal that indicates when it's safe to read from or write to memory. This signal goes off (gets cleared) when there's a change in the address we're accessing (<code>addressM</code>) or when we want to write something new (<code>writeM</code>). It turns on (gets set) when the data has been successfully written or the data to be read is ready.</li>
+<li><strong>Pausing the Processor</strong>: To cope with this slow memory, we could pause the Hack processor's operation while waiting for the memory. This can be done by using the "ready" signal in combination with the control signals for the A, D, and PC (Program Counter) registers. If we make it so these registers can't change unless the memory is ready, the processor effectively stops and waits whenever it needs to access RAM.</li>
+<li><strong>Impact on Performance</strong>: Any instruction that needs to access this slow RAM will take 500 times longer to execute than it did before. However, instructions not using RAM are still fast. This means the computer still works, but it's much slower when using RAM.</li>
+</ul>
+<h3 id="real-world-scenario-with-slow-memory">Real-world Scenario with Slow Memory:</h3>
+<ul>
+<li><strong>Simplicity of the Hack Computer</strong>: The Hack machine is straightforward—it has different memories for instructions and data, everything is synchronized to one clock signal, and every instruction takes the same time to execute.</li>
+<li><strong>Complexity of Usual Computers (Von Neumann architecture)</strong>: Most real-world computers use a design where there's only one memory for both instructions (the code) and data. This setup can lead to "traffic jams" since both the CPU and the data operations need to use the same memory space.</li>
+<li><strong>Slow Memory Issue</strong>: In real systems, the main memory (RAM) can be much slower compared to the CPU because of its larger size, meaning it takes more time (clock cycles) to access the data stored in it.</li>
+<li><strong>The Big Question</strong>: So, how do we design a computer that works quickly even when it takes a long time to access memory? (This leads to discussions of various strategies used in computer architecture, like caching, pipelining, and parallelism, to mitigate the performance impact of slow memory access, but that's beyond the scope of the current passage.)</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Imagine two cyclists (representing the CPU and the memory) riding together:
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>1. One cyclist (the CPU) is very fast, capable of riding at high speeds.
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>2. The other cyclist (the memory) is much slower, perhaps because they're on a heavier bike or are just not as fast.
+</span></code></pre></div>
+<h2 id="memory-hierarchies">Memory Hierarchies</h2>
+<ul>
+<li>The usual Von-Neumann architecture is more complex<ul>
+<li>There is only one memory<ul>
+<li>All instructions and data live in the same memory</li>
+<li>Reading instructions interferes with reading / writing data</li>
+</ul>
+</li>
+<li>Real memories can be very large but much slower than the CPU<ul>
+<li>Takes anywhere from 2 to more than 500 clock cycles to access</li>
+</ul>
+</li>
+<li>How do make this work?</li>
+</ul>
+</li>
+</ul>
+<h3 id="memory-caching-hardware-implemented">Memory Caching - Hardware Implemented</h3>
+<ul>
+<li>A memory cache<ul>
+<li>It may appear to behave like memory from the outside</li>
+<li>Internally it keeps copies of blocks of memory that were accessed</li>
+<li>It has a lookup table recording the address of the copies</li>
+<li>Access to data in the cache is very fast</li>
+<li>Access to data not in the cache must wait for the memory</li>
+<li>Access to data not in the cache may be slower than without one</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231017135218" src="../../../assets/Pasted%20image%2020231017135218.png"></p>
+<ul>
+<li>Instruction caching<ul>
+<li>When an instruction is required, copy it, and others around it</li>
+<li>Instructions already in the cache can be read very quickly</li>
+<li>Instructions do not change<ul>
+<li>If the cache is full, you can safely overwrite anything you like</li>
+</ul>
+</li>
+<li>The same instructions are used over and over again - temporal locality<ul>
+<li>Loops and frequently used functions</li>
+</ul>
+</li>
+<li>Instructions are read in sequence, so can be cached in blocks - spatial locality</li>
+<li>But the wrong choices can have a negative impact on performance</li>
+</ul>
+</li>
+<li>Data caching<ul>
+<li>When data is required, copy it and the data around it</li>
+<li>Data already in the cache can be read very quickly</li>
+<li>When data is written, keep a copy of it</li>
+<li>Caching data is a more complex problem</li>
+<li>If data is frequently accessed, you want it to stay in the cache</li>
+<li>If the cache is full, what do you overwrite?</li>
+<li>You cannot overwrite new data that has been modified, but not written to memory</li>
+<li>The wrong choices can have a catastrophic impact on performance</li>
+<li>The choices are implemented in hardware, change may be impossible</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231017135907" src="../../../assets/Pasted%20image%2020231017135907.png"></p>
+<ul>
+<li>To fix the issues of data caching, we have multiple layers of cache</li>
+</ul>
+<p><img alt="Pasted image 20231017141654" src="../../../assets/Pasted%20image%2020231017141654.png"></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>In our cycling duo, the faster cyclist (CPU) often needs quick sips of water (data) during the ride. The slower cyclist (memory) can't keep up but has a small, fast cart (cache) with water bottles. 
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>This cart doesn't speed up the cyclist but holds water bottles within easy reach for quick handoffs, reducing wait times. However, if the cart runs out of water (cache miss), the slower cyclist must fetch more from a distant van (main memory), causing delays. 
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>The key isn't making the cyclists match pace, but strategically minimizing waits by keeping the most needed supplies (frequently used data) at hand (in the cache).
+</span></code></pre></div>
+<h3 id="memory-hierarchies_1">Memory Hierarchies</h3>
+<ul>
+<li>The caches are mostly hidden from the programmer</li>
+<li>In some cases, virtual memory can be manipulated directly</li>
+<li>Memory mapped files are a good example</li>
+<li>Virtual memory is partly implemented in software</li>
+<li>Hardware exceptions run page fault handlers to move data</li>
+<li>Caches work to hide themselves from the programmer</li>
+<li>What the programmer sees on a modern CPU:</li>
+</ul>
+<p><img alt="Pasted image 20231017141856" src="../../../assets/Pasted%20image%2020231017141856.png"></p>
+<h3 id="benefits-of-caching">Benefits of Caching</h3>
+<ul>
+<li>Temporal locality<ul>
+<li>Instructions and data tend to get used again in the near future</li>
+<li>Caches that replace the least recently used content may work well</li>
+</ul>
+</li>
+<li>Spatial locality<ul>
+<li>Instructions and data tend to be near something that was just used</li>
+<li>Caches usually copy an enclosing block of instructions or data</li>
+<li>Cache line size can vary a lot, the best size depends on the program</li>
+</ul>
+</li>
+</ul>
+<h2 id="summary">Summary</h2>
+<ul>
+<li>Caching is used everywhere in a computer</li>
+<li>Instruction aching is usually very effective<ul>
+<li>Instructions do not change during execution</li>
+<li>Most instructions get used over and over again</li>
+</ul>
+</li>
+<li>Data caching can be very effective<ul>
+<li>Data changes during execution</li>
+<li>When data is accessed, it may be used again soon</li>
+<li>When data is accessed, nearby data may be used again soon</li>
+</ul>
+</li>
+<li>Virtual Memory (VM)<ul>
+<li>Main memory can be a cache for a much larger virtual memory</li>
+<li>Every program can view it's entire 16 exabytes of VM</li>
+<li>It works so long as the programs do not use too much of it</li>
+<li>Physical resources still need to be available</li>
+</ul>
+</li>
+</ul>
+<h5 id="examples">Examples</h5>
+<p><img alt="Pasted image 20231019141214" src="../../../assets/Pasted%20image%2020231019141214.png"></p>
+<ul>
+<li>The longest path gets longer, but multiply operations are now much much shorter</li>
+</ul>
+<p><img alt="Pasted image 20231019141520" src="../../../assets/Pasted%20image%2020231019141520.png">
+$$
+P = \frac{1}{2} \cdot C \cdot V^2 \cdot F
+$$
+- Where F = 1/T</p>
+<p><img alt="Pasted image 20231019142053" src="../../../assets/Pasted%20image%2020231019142053.png"></p>
+<ul>
+<li>At the start of a clock cycle, the RAM will always output the data from the location identified by the a register's previous value until the current value has had time to propagate through the RAM's Multiplexes. So in this case, the previous instruction must have started with the value 500 12 in the A Register, even if it was not accessing RAM.</li>
+</ul>
+<p><img alt="Pasted image 20231019142246" src="../../../assets/Pasted%20image%2020231019142246.png"></p></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

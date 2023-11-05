@@ -1,0 +1,714 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../Notes/1.1%20Boolean%20Logic/">
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>Home - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#personal-thoughts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#personal-thoughts" class="md-nav__link">
+    Personal Thoughts
+  </a>
+  
+    <nav class="md-nav" aria-label="Personal Thoughts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#takeaways" class="md-nav__link">
+    Takeaways
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#textbook" class="md-nav__link">
+    Textbook
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    Notes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revision-worksheets" class="md-nav__link">
+    Revision Worksheets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#past-papers-w-worked-solutions" class="md-nav__link">
+    Past Papers (w/ Worked Solutions)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../Notes/1.1%20Boolean%20Logic/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#personal-thoughts" class="md-nav__link">
+    Personal Thoughts
+  </a>
+  
+    <nav class="md-nav" aria-label="Personal Thoughts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#takeaways" class="md-nav__link">
+    Takeaways
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#textbook" class="md-nav__link">
+    Textbook
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    Notes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revision-worksheets" class="md-nav__link">
+    Revision Worksheets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#past-papers-w-worked-solutions" class="md-nav__link">
+    Past Papers (w/ Worked Solutions)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Home</h1>
+
+<div><p>This course covers the fundamental aspects of computer systems. It begins with an exploration of basic hardware components like gates and progresses to examine higher-level structures such as compilers, programming languages, and applications. The objective is to provide an understanding of how computer systems are structured in layers and the way simple interfaces are used to develop complex systems.</p>
+<p>Topics include digital logic, memory systems, processor architecture, assembly language, the workings of virtual machines, recursive descent parsing, code generation, and the functions of operating systems.</p>
+<h2 id="personal-thoughts">Personal Thoughts</h2>
+<p><img alt="" src="../../assets/84yhci%201.jpg"></p>
+<ul>
+<li>This class was certainly interesting to say the least. The content was incredible, and every single person on planet earth could benefit from learning low level computing. Everyone. You don't even have to like computers to learn something beneficial from this class. On the other hand, this is the least hand-holdy and disorganised class I have ever taken, by far. If you want to learn this shit, you have to learn it. No one is gonna help you.</li>
+<li>Not only did the class make me a better programmer, but it also helped with my mental health. Virtual machines, compilers and stacks are such fascinating concepts that could be applied quite literally anywhere.</li>
+<li><a href="../Notes/7.1%20Stack%20Frames%20%26%20Function%20Handling/">7.1 Stack Frames &amp; Function Handling</a> is the personal standout of this class. Took me 7 hours to go through that chapter, but it felt like 30 minutes. That's how interesting it is. I don't even like reading.</li>
+</ul>
+<h3 id="takeaways">Takeaways</h3>
+<ul>
+<li>Stacks are cool as fuck</li>
+<li>Babushka dolls are basically computers??</li>
+<li>I still don't understand pointers (jk)</li>
+<li>If you want to learn this course but are not in Uni, take nand2tetris for free online. They basically ripped it off anyway.</li>
+</ul>
+<h2 id="textbook">Textbook</h2>
+<ul>
+<li><a class="pdf" href="../Elements%20Of%20Computing%20Systems.pdf">Elements of Computing Systems</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><a href="../Notes/1.1%20Boolean%20Logic/">1.1 Boolean Logic</a></li>
+<li><a href="../Notes/2.1%20Logic%20Gates/">2.1 Logic Gates</a></li>
+<li><a href="../Notes/1.2%20Boolean%20Arithmetic/">1.2 Boolean Arithmetic</a></li>
+<li><a href="../Notes/2.2%20Memory/">2.2 Memory</a></li>
+<li><a href="../Notes/3.1%20Machine%20Language/">3.1 Machine Language</a></li>
+<li><a href="../Notes/4.1%20Computer%20Architecture/">4.1 Computer Architecture</a></li>
+<li><a href="../Notes/5.1%20Assemblers/">5.1 Assemblers</a></li>
+<li><a href="../Notes/6.1%20Stack%20Machines%20%26%20Arithmetic/">6.1 Stack Machines &amp; Arithmetic</a></li>
+<li><a href="../Notes/7.1%20Stack%20Frames%20%26%20Function%20Handling/">7.1 Stack Frames &amp; Function Handling</a></li>
+<li><a href="../Notes/8.1%20High%20Level%20Languages/">8.1 High Level Languages</a></li>
+<li><a href="../Notes/8.2%20Jack%20Examples/">8.2 Jack Examples</a></li>
+<li><a href="../Notes/9.1%20Compiler%20Syntax/">9.1 Compiler Syntax</a></li>
+<li><a href="../Notes/10.1%20Compiler%20Code%20Generation/">10.1 Compiler Code Generation</a></li>
+<li><a href="../Notes/11.1%20Signals%20%26%20Caching/">11.1 Signals &amp; Caching</a></li>
+</ul>
+<h2 id="revision-worksheets">Revision Worksheets</h2>
+<ul>
+<li><a class="pdf" href="../Revision/Week%202%20Worksheet.pdf">Week 2 Worksheet</a></li>
+<li><a class="pdf" href="../Revision/Week%203%20Worksheet.pdf">Week 3 Worksheet</a></li>
+<li><a class="pdf" href="../Revision/Week%204%20Worksheet.pdf">Week 4 Worksheet</a></li>
+<li><a class="pdf" href="../Revision/Week%204%20Worksheet%202.pdf">Week 4 Worksheet 2</a></li>
+<li><a class="pdf" href="../Revision/Week%205%20Worksheet.pdf">Week 5 Worksheet</a></li>
+<li><a class="pdf" href="../Revision/Week%206%20Worksheet.pdf">Week 6 Worksheet</a></li>
+<li><a class="pdf" href="../Revision/Week%207%20Worksheet.pdf">Week 7 Worksheet</a></li>
+<li><a class="pdf" href="../Revision/Week%208%2B9%20Worksheet.pdf">Week 8+9 Worksheet</a></li>
+<li><a class="pdf" href="../Revision/Week%2010%20Worksheet.pdf">Week 10 Worksheet</a></li>
+<li><a class="pdf" href="../Revision/Exam%20Revision.pdf">Exam Worksheet</a></li>
+</ul>
+<h2 id="past-papers-w-worked-solutions">Past Papers (w/ Worked Solutions)</h2>
+<ul>
+<li><a class="pdf" href="../Past%20Papers/2023%20Mock%20Exam.pdf">2023 Mock Exam</a></li>
+<li><a class="pdf" href="../Past%20Papers/2023%20Workshop%20Exam.pdf">2023 Workshop Exam</a></li>
+</ul></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

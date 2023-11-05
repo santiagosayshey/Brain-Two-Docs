@@ -1,0 +1,1204 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../1.1%20Boolean%20Logic/">
+      
+      
+        <link rel="next" href="../10.1%20Compiler%20Code%20Generation/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>1.2 Boolean Arithmetic - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#arithmetic-operations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              1.2 Boolean Arithmetic
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#arithmetic-operations" class="md-nav__link">
+    Arithmetic Operations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binary-numbers" class="md-nav__link">
+    Binary Numbers
+  </a>
+  
+    <nav class="md-nav" aria-label="Binary Numbers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixed-word-size" class="md-nav__link">
+    Fixed Word Size
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binary-addition" class="md-nav__link">
+    Binary Addition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signed-binary-numbers-positive-and-negative-numbers" class="md-nav__link">
+    Signed Binary Numbers (Positive and Negative Numbers)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adders" class="md-nav__link">
+    Adders
+  </a>
+  
+    <nav class="md-nav" aria-label="Adders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#half-adder" class="md-nav__link">
+    Half Adder
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-adder" class="md-nav__link">
+    Full Adder
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adder" class="md-nav__link">
+    Adder
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incrementor" class="md-nav__link">
+    Incrementor
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arithmetic-logic-unit" class="md-nav__link">
+    Arithmetic Logic Unit
+  </a>
+  
+    <nav class="md-nav" aria-label="Arithmetic Logic Unit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-x-1" class="md-nav__link">
+    Example - x-1
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#arithmetic-operations" class="md-nav__link">
+    Arithmetic Operations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binary-numbers" class="md-nav__link">
+    Binary Numbers
+  </a>
+  
+    <nav class="md-nav" aria-label="Binary Numbers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixed-word-size" class="md-nav__link">
+    Fixed Word Size
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binary-addition" class="md-nav__link">
+    Binary Addition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signed-binary-numbers-positive-and-negative-numbers" class="md-nav__link">
+    Signed Binary Numbers (Positive and Negative Numbers)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adders" class="md-nav__link">
+    Adders
+  </a>
+  
+    <nav class="md-nav" aria-label="Adders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#half-adder" class="md-nav__link">
+    Half Adder
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-adder" class="md-nav__link">
+    Full Adder
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adder" class="md-nav__link">
+    Adder
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incrementor" class="md-nav__link">
+    Incrementor
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arithmetic-logic-unit" class="md-nav__link">
+    Arithmetic Logic Unit
+  </a>
+  
+    <nav class="md-nav" aria-label="Arithmetic Logic Unit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-x-1" class="md-nav__link">
+    Example - x-1
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>1.2 Boolean Arithmetic</h1>
+
+<div><h2 id="arithmetic-operations">Arithmetic Operations</h2>
+<ul>
+<li>Computers must be able to perform:<ul>
+<li>Addition</li>
+<li>Sign Conversion</li>
+<li>Subtraction</li>
+<li>Comparison</li>
+<li>Multiplication</li>
+<li>Division</li>
+</ul>
+</li>
+</ul>
+<h2 id="binary-numbers">Binary Numbers</h2>
+<ul>
+<li>
+<p>Using the decimal system, we can say that a number is just the sum of each digit in base 10, ie, each digit is multiplied by 10 to the index of the digit (starting from 0 on the right)</p>
+<ul>
+<li>For example, 6083 can be expressed as: 
+$$ 
+6083 = 6 \cdot 10^3 + 0 \cdot 10^2 + 8 \cdot 10^1 + 3 \cdot 10^0
+$$</li>
+</ul>
+</li>
+<li>
+<p>The same numbers can be broken down for each base, base two for the case of binary numbers</p>
+<ul>
+<li>For example, the number 19, expressed in binary is: 
+$$
+10011_2 = 1 \cdot 2^4 + 0 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 1 \cdot 2^0 = 19_{10}
+$$</li>
+</ul>
+</li>
+</ul>
+<h3 id="fixed-word-size">Fixed Word Size</h3>
+<ul>
+<li>Computers are finite machines that have a fixed size for representing numbers<ul>
+<li>Expressed in bits - 8, 16, 32, 64, etc</li>
+<li>For example, an 8 bit register can code 2^8 = 256 different things</li>
+<li>Therefore, an n-bit binary system can code 2^n different things</li>
+</ul>
+</li>
+</ul>
+<h2 id="binary-addition">Binary Addition</h2>
+<ul>
+<li>When adding binary numbers, we start from the rightmost bit (least significant bit) and move towards the left</li>
+<li>If the sum of two bits is 2 (10 in binary), we write down the 0 and carry the 1 over to the next more significant bit</li>
+<li>If the sum is 3 (11 in binary), we write down the 1 and carry the 1 over to the next more significant bit</li>
+<li>
+<p>If there is a carry out of the leftmost bit, it's an overflow.</p>
+</li>
+<li>
+<p>Consider the binary numbers 1011011 and 1110011. Here's how we add them, from right to left:</p>
+<ol>
+<li>1 + 1 = 0 with a carry of 1 (10 in binary).</li>
+<li>1 (from carry) + 1 + 1 = 1 with a carry of 1 (11 in binary).</li>
+<li>1 (from carry) + 0 + 0 = 1 with no carry.</li>
+<li>1 + 1 = 0 with a carry of 1.</li>
+<li>1 (from carry) + 1 + 1 = 1 with a carry of 1.</li>
+<li>1 (from carry) + 0 + 1 = 0 with a carry of 1.</li>
+<li>1 (from carry) + 1 + 1 = 1 with a carry of 1.</li>
+</ol>
+</li>
+<li>
+<p>The carry out of the leftmost bit (bolded) is an overflow and is generally discarded in fixed-size binary arithmetic.</p>
+</li>
+</ul>
+<h2 id="signed-binary-numbers-positive-and-negative-numbers">Signed Binary Numbers (Positive and Negative Numbers)</h2>
+<ul>
+<li>Signed numbers essentially take the size of a regular register, and halves it (allowing the negative compliment to exist as well)</li>
+<li>To check whether or not a value is positive or negative, we look at the most significant (left most bit)<ul>
+<li>If 0, then positive</li>
+<li>If 1, then negative </li>
+</ul>
+</li>
+<li>To express a number in binary as it’s negative, we flip each bit (1s become 0s and vice versa), then add one, starting from the right most bit (add 1 binary, not decimal)</li>
+<li>This method is called <em>Two’s Compliment</em></li>
+<li>This poses an issue with overflow errors, as when it happens, a positive number is then expressed as a negative one</li>
+<li>This means that we can just treat subtraction as a special case of addition <ul>
+<li>Consider 5-7</li>
+<li>This is the same as 5 + (-7)</li>
+<li>If we add their resulting binary numbers( 0101 + 1001 ), we get 1110, which is indeed the binary code of -2</li>
+</ul>
+</li>
+</ul>
+<h2 id="adders">Adders</h2>
+<ul>
+<li>Add bits together<ul>
+<li>Half adder adds two bits</li>
+<li>Full adder adds three bits</li>
+<li><em>Adder</em> adds two <em>n</em> bit numbers</li>
+<li>Incremented adds 1 to a given number </li>
+</ul>
+</li>
+</ul>
+<h3 id="half-adder">Half Adder</h3>
+<ul>
+<li>A half adder is a digital circuit that performs the addition of two binary digits.</li>
+<li>It has two inputs (for the two bits being added) and two outputs (for the sum and carry).</li>
+<li>The sum output represents the XOR of the two inputs.</li>
+<li>The carry output represents the AND of the two inputs.</li>
+</ul>
+<p><img alt="figure_2.2" src="../../../assets/figure_2.2.png"></p>
+<p><img alt="Pasted image 20230802135543" src="../../../assets/Pasted%20image%2020230802135543.png"></p>
+<h3 id="full-adder">Full Adder</h3>
+<ul>
+<li>A full adder is an extension of the half adder, designed to handle the addition of three bits -- the two bits being added, plus an incoming carry from the addition of the previous pair of bits.</li>
+<li>It has three inputs (two bits for addition and one carry input) and two outputs (the sum and the carry).</li>
+<li>The sum output represents the XOR of the three inputs.</li>
+<li>The carry output is true if any two or all three of the inputs are true.</li>
+</ul>
+<p><img alt="Pasted image 20230802135649" src="../../../assets/Pasted%20image%2020230802135649.png"></p>
+<h3 id="adder">Adder</h3>
+<ul>
+<li>To add n-bit numbers, we use a series of n full adders, each handling the addition of one pair of corresponding bits and the carry from the previous pair.</li>
+<li>This setup is often called a ripple-carry adder because the carry 'ripples' from one bit to the next.</li>
+<li>The carry-out from each full adder is the carry-in for the next.</li>
+<li>An overflow occurs if there's a final carry-out from the last full adder, because there's no (n+1)th bit position to hold it in the n-bit result.</li>
+</ul>
+<p><img alt="figure_2.4" src="../../../assets/figure_2.4.png"></p>
+<h3 id="incrementor">Incrementor</h3>
+<ul>
+<li>Adds 1 to a given number</li>
+<li>This allows fetching the next instruction from memory</li>
+</ul>
+<h2 id="arithmetic-logic-unit">Arithmetic Logic Unit</h2>
+<ul>
+<li>Computes a set of arithmetic and logic operations</li>
+<li>Consists of two input integers and size 1bit control bits, which tell the ALU what operation to perform on the input integers</li>
+<li>These control bits can be manipulated to allow for even more operations than initially realised</li>
+<li>This is an example ALU that operates on two 16 bit integers</li>
+</ul>
+<p><img alt="figure_2.5a" src="../../../assets/figure_2.5a.png"></p>
+<p><img alt="figure_2.5b" src="../../../assets/figure_2.5b.png"></p>
+<h5 id="example-x-1">Example - x-1</h5>
+<ul>
+<li><strong>The Goal:</strong> We want to compute the function <code>x - 1</code> for <code>x = 27</code>. In other words, we want to subtract 1 from the number 27.</li>
+<li><strong>Setting Up the Inputs:</strong> To do this, we first feed the 16-bit binary code of 27 into the <code>x</code> input of the ALU. Since we are subtracting 1 from <code>x</code>, the <code>y</code> input doesn't matter in this case.</li>
+<li><strong>Setting the Control Bits:</strong> We set the ALU's control bits to <code>001110</code>. Let's break down what each bit does:<ul>
+<li><code>zx = 0</code>: Leaves <code>x</code> as it is.</li>
+<li><code>nx = 0</code>: Does not negate <code>x</code>.</li>
+<li><code>zy = 1</code>: Sets <code>y</code> to 0.</li>
+<li><code>ny = 1</code>: Negates <code>y</code> to become -1 (since negating 0 in two's complement gives -1).</li>
+<li><code>f = 1</code>: Chooses the addition operation for <code>out = x + y</code> (which in this case is <code>x + (-1) = x - 1</code>).</li>
+<li><code>no = 0</code>: Leaves the output as is.</li>
+</ul>
+</li>
+<li><strong>The Operation:</strong> These settings essentially tell the ALU to leave <code>x</code> unchanged, negate <code>y</code> to -1, add <code>x</code> and <code>-1</code>, and leave the result as is.</li>
+<li><strong>The Output:</strong> Given these control bit settings, the ALU should output the binary code representing 26, which is <code>x - 1</code>.</li>
+</ul></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

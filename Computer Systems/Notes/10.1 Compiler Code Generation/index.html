@@ -1,0 +1,2150 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../1.2%20Boolean%20Arithmetic/">
+      
+      
+        <link rel="next" href="../11.1%20Signals%20%26%20Caching/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>10.1 Compiler Code Generation - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#code-generation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              10.1 Compiler Code Generation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#code-generation" class="md-nav__link">
+    Code Generation
+  </a>
+  
+    <nav class="md-nav" aria-label="Code Generation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compiling-variables" class="md-nav__link">
+    Compiling Variables
+  </a>
+  
+    <nav class="md-nav" aria-label="Compiling Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symbol-table" class="md-nav__link">
+    Symbol Table
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-declarations" class="md-nav__link">
+    Variable Declarations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variables-in-statements" class="md-nav__link">
+    Variables in Statements
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-expressions" class="md-nav__link">
+    Compiling Expressions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-strings" class="md-nav__link">
+    Compiling Strings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-statements" class="md-nav__link">
+    Compiling Statements
+  </a>
+  
+    <nav class="md-nav" aria-label="Compiling Statements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compiling-return-statements" class="md-nav__link">
+    Compiling return Statements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-let-statements" class="md-nav__link">
+    Compiling let Statements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-do-statements" class="md-nav__link">
+    Compiling do Statements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-if-and-while-statements" class="md-nav__link">
+    Compiling if and while Statements:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-objects" class="md-nav__link">
+    Compiling Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Compiling Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compiling-constructor-calls" class="md-nav__link">
+    Compiling Constructor Calls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-constructors" class="md-nav__link">
+    Compiling Constructors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-method-calls" class="md-nav__link">
+    Compiling Method Calls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-methods" class="md-nav__link">
+    Compiling Methods
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-arrays" class="md-nav__link">
+    Compiling Arrays
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-mapping" class="md-nav__link">
+    Standard Mapping
+  </a>
+  
+    <nav class="md-nav" aria-label="Standard Mapping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#naming-conventions" class="md-nav__link">
+    Naming Conventions:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-variables" class="md-nav__link">
+    Mapping Variables:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-object-fields" class="md-nav__link">
+    Mapping Object Fields:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-array-elements" class="md-nav__link">
+    Mapping Array Elements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-constants" class="md-nav__link">
+    Mapping Constants:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-guidelines" class="md-nav__link">
+    Implementation Guidelines
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handling-identifiers" class="md-nav__link">
+    Handling Identifiers:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-expressions_1" class="md-nav__link">
+    Compiling Expressions:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-strings_1" class="md-nav__link">
+    Compiling Strings:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-function-calls-and-constructor-calls" class="md-nav__link">
+    Compiling Function Calls and Constructor Calls:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-method-calls_1" class="md-nav__link">
+    Compiling Method Calls:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-do-statements_1" class="md-nav__link">
+    Compiling do Statements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-classes" class="md-nav__link">
+    Compiling Classes:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-subroutines" class="md-nav__link">
+    Compiling Subroutines:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-constructors_1" class="md-nav__link">
+    Compiling Constructors:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-void-methods-and-void-functions" class="md-nav__link">
+    Compiling Void Methods and Void Functions:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-arrays_1" class="md-nav__link">
+    Compiling Arrays:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-architecture" class="md-nav__link">
+    Software Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Software Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symbol-table_1" class="md-nav__link">
+    Symbol Table
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vmwriter" class="md-nav__link">
+    VMWriter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compilationengine" class="md-nav__link">
+    CompilationEngine
+  </a>
+  
+    <nav class="md-nav" aria-label="CompilationEngine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#code-generation" class="md-nav__link">
+    Code Generation
+  </a>
+  
+    <nav class="md-nav" aria-label="Code Generation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compiling-variables" class="md-nav__link">
+    Compiling Variables
+  </a>
+  
+    <nav class="md-nav" aria-label="Compiling Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symbol-table" class="md-nav__link">
+    Symbol Table
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-declarations" class="md-nav__link">
+    Variable Declarations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variables-in-statements" class="md-nav__link">
+    Variables in Statements
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-expressions" class="md-nav__link">
+    Compiling Expressions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-strings" class="md-nav__link">
+    Compiling Strings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-statements" class="md-nav__link">
+    Compiling Statements
+  </a>
+  
+    <nav class="md-nav" aria-label="Compiling Statements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compiling-return-statements" class="md-nav__link">
+    Compiling return Statements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-let-statements" class="md-nav__link">
+    Compiling let Statements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-do-statements" class="md-nav__link">
+    Compiling do Statements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-if-and-while-statements" class="md-nav__link">
+    Compiling if and while Statements:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-objects" class="md-nav__link">
+    Compiling Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Compiling Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compiling-constructor-calls" class="md-nav__link">
+    Compiling Constructor Calls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-constructors" class="md-nav__link">
+    Compiling Constructors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-method-calls" class="md-nav__link">
+    Compiling Method Calls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-methods" class="md-nav__link">
+    Compiling Methods
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-arrays" class="md-nav__link">
+    Compiling Arrays
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-mapping" class="md-nav__link">
+    Standard Mapping
+  </a>
+  
+    <nav class="md-nav" aria-label="Standard Mapping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#naming-conventions" class="md-nav__link">
+    Naming Conventions:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-variables" class="md-nav__link">
+    Mapping Variables:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-object-fields" class="md-nav__link">
+    Mapping Object Fields:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-array-elements" class="md-nav__link">
+    Mapping Array Elements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-constants" class="md-nav__link">
+    Mapping Constants:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-guidelines" class="md-nav__link">
+    Implementation Guidelines
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handling-identifiers" class="md-nav__link">
+    Handling Identifiers:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-expressions_1" class="md-nav__link">
+    Compiling Expressions:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-strings_1" class="md-nav__link">
+    Compiling Strings:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-function-calls-and-constructor-calls" class="md-nav__link">
+    Compiling Function Calls and Constructor Calls:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-method-calls_1" class="md-nav__link">
+    Compiling Method Calls:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-do-statements_1" class="md-nav__link">
+    Compiling do Statements:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-classes" class="md-nav__link">
+    Compiling Classes:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-subroutines" class="md-nav__link">
+    Compiling Subroutines:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-constructors_1" class="md-nav__link">
+    Compiling Constructors:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-void-methods-and-void-functions" class="md-nav__link">
+    Compiling Void Methods and Void Functions:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiling-arrays_1" class="md-nav__link">
+    Compiling Arrays:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-architecture" class="md-nav__link">
+    Software Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Software Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symbol-table_1" class="md-nav__link">
+    Symbol Table
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vmwriter" class="md-nav__link">
+    VMWriter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compilationengine" class="md-nav__link">
+    CompilationEngine
+  </a>
+  
+    <nav class="md-nav" aria-label="CompilationEngine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>10.1 Compiler Code Generation</h1>
+
+<div><blockquote>
+<p><em>When I am working on a problem, I never think about beauty. But when I have finished, if the solution is not beautiful, I know it is wrong.</em> - R. Buckminster Fuller (1895–1993)</p>
+</blockquote>
+<h2 id="code-generation">Code Generation</h2>
+<ul>
+<li>The goal is to convert high level language understood by humans, into low level code understood by computers</li>
+</ul>
+<h3 id="compiling-variables">Compiling Variables</h3>
+<ul>
+<li>All primitive types are 16 bit, so each variable is 1 <em>word</em> long</li>
+<li>Static variables should exist only once during the entirety of the program's life</li>
+<li>Field variables should exist for each object and only during that object's life cycle</li>
+<li>Subroutine variables should exist for each time the routine is called and then freed after it ends<ul>
+<li>All of these are handled with the VM memory segments - <code>static, local, argument, this, that</code></li>
+</ul>
+</li>
+<li>Managed using a symbol table</li>
+</ul>
+<h4 id="symbol-table">Symbol Table</h4>
+<ul>
+<li>When the compiler encounters a variable in a high level statement, it needs to know what memory segment it should belong to and what it represents</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>let y = foo(x)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>- static, field, local?
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>- int, boolean, char, object?
+</span></code></pre></div>
+<ul>
+<li>These properties can easily be managed using a <strong>symbol table</strong></li>
+<li>When a variable is declared in the source code, the compiler allocates the needed VM memory segment and records this mapping in the symbol table<ul>
+<li>Whenever a variable is encountered, it's properties are retrieved from this table or if it doesn't exist yet, is added to it</li>
+</ul>
+</li>
+<li>These variables can exist in multiple scopes and in which they can possess different properties<ul>
+<li>Static and field variables are scoped to the class in which they are declared</li>
+<li>Local and arg variables are scoped to the subroutine in which they are declared</li>
+<li>This is achieved using a symbol table for each scope</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231010055227" src="../../../assets/Pasted%20image%2020231010055227.png"></p>
+<ul>
+<li>Scopes are nested, with inner scopes hiding outer ones<ul>
+<li>Variables are searched outwards and if not found, are added to the symbol table in the current scope</li>
+</ul>
+</li>
+<li>Jack only has two scopes, the subroutine level and the class level, and therefore, only two symbol tables</li>
+</ul>
+<h4 id="variable-declarations">Variable Declarations</h4>
+<ol>
+<li><strong>Compiler Start for Class Declaration</strong>:</li>
+<li>Create class-level symbol table.</li>
+<li>
+<p>Create subroutine-level symbol table.</p>
+</li>
+<li>
+<p><strong>On Parsing <code>static</code> or <code>field</code> Variable</strong>:</p>
+</li>
+<li>Add to class-level table.</li>
+<li>
+<p>Record: variable name, type, kind (<code>static</code> or <code>field</code>), and index within kind.</p>
+</li>
+<li>
+<p><strong>On Starting Subroutine Compilation</strong>:</p>
+</li>
+<li>Reset subroutine-level table.</li>
+<li>
+<p>If subroutine is a method:</p>
+<ul>
+<li>Add row <code>&lt;this, className, arg, 0&gt;</code> to subroutine-level table.</li>
+</ul>
+</li>
+<li>
+<p><strong>On Parsing <code>local</code> or <code>argument</code> Variable</strong>:</p>
+</li>
+<li>Add to subroutine-level table.</li>
+<li>
+<p>Record: variable name, type, kind (<code>var</code> or <code>arg</code>), and index within kind.</p>
+</li>
+<li>
+<p><strong>Indexing</strong>:</p>
+</li>
+<li>Start index for each kind (<code>var</code> or <code>arg</code>) at 0.</li>
+<li>Increment by 1 for each new variable of that kind added.</li>
+</ol>
+<h4 id="variables-in-statements">Variables in Statements</h4>
+<ol>
+<li><strong>Variable in a Statement</strong>:</li>
+<li>Compiler first checks subroutine-level symbol table for the variable.</li>
+<li>
+<p>If not found, checks class-level symbol table.</p>
+</li>
+<li>
+<p><strong>Variable Found</strong>:</p>
+</li>
+<li>Compiler completes translation of the statement.</li>
+</ol>
+<h3 id="compiling-expressions">Compiling Expressions</h3>
+<ul>
+<li>Goal is to convert infix notation (high level) to postfix notation (VM commands)</li>
+</ul>
+<p><img alt="Pasted image 20231010061407" src="../../../assets/Pasted%20image%2020231010061407.png"></p>
+<ul>
+<li>Achieved using a simple algorithm that parses an expression from left to right<ul>
+<li>Can call itself recursively to handle larger simple expressions</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231010061525" src="../../../assets/Pasted%20image%2020231010061525.png"></p>
+<ul>
+<li>Full definition:</li>
+</ul>
+<p><img alt="Pasted image 20231010061731" src="../../../assets/Pasted%20image%2020231010061731.png"></p>
+<h3 id="compiling-strings">Compiling Strings</h3>
+<ul>
+<li>
+<p><strong>Jack’s String Handling</strong>:</p>
+<ul>
+<li>When a string constant appears in code:<ul>
+<li>Compiler generates code to call <code>String</code> constructor (creates new <code>String</code> object).</li>
+<li>Initializes object with characters using <code>appendChar</code> for each character.</li>
+</ul>
+</li>
+<li>Can be inefficient and lead to memory leaks.</li>
+</ul>
+</li>
+<li>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>Statement: <code>Output.printString("Loading … please wait")</code>.</li>
+<li>Creates a persistent <code>String</code> object in memory, even if just displaying a message.</li>
+</ul>
+</li>
+<li>
+<p><strong>Comparison with Modern Languages</strong>:</p>
+<ul>
+<li>Java, C#, and Python have garbage collection to reclaim memory from unused objects.</li>
+<li>Modern languages employ optimizations and specialized string classes for efficiency.</li>
+</ul>
+</li>
+</ul>
+<h3 id="compiling-statements">Compiling Statements</h3>
+<ul>
+<li><strong>Jack Statements</strong>:</li>
+<li>Includes: <code>let</code>, <code>do</code>, <code>return</code>, <code>if</code>, <code>while</code>.</li>
+</ul>
+<h4 id="compiling-return-statements"><strong>Compiling <code>return</code> Statements</strong>:</h4>
+<ul>
+<li>Call <code>compileExpression</code> to evaluate and push expression value to the stack.</li>
+<li>Generate VM command <code>return</code>.</li>
+</ul>
+<h4 id="compiling-let-statements"><strong>Compiling <code>let</code> Statements</strong>:</h4>
+<ul>
+<li>Handle form: <code>let varName = expression</code>.</li>
+<li>Process:<ul>
+<li>Remember <code>varName</code>.</li>
+<li>Call <code>compileExpression</code> to push expression value to stack.</li>
+<li>Generate VM command like <code>pop varName</code> (mapped from symbol table, e.g., <code>local 3</code>, <code>static 1</code>).</li>
+</ul>
+</li>
+<li>Array handling of <code>let</code> statements discussed later in the chapter.</li>
+</ul>
+<h4 id="compiling-do-statements"><strong>Compiling <code>do</code> Statements</strong>:</h4>
+<ul>
+<li>Handle form: <code>do className.functionName(exp1, exp2, … , expn)</code>.</li>
+<li>Purpose: Call subroutine for effect, disregard return value.</li>
+<li>Recommendation:<ul>
+<li>Compile as if the syntax is <code>do expression</code>.</li>
+<li>Call <code>compileExpression</code>.</li>
+<li>Remove topmost stack element using command like <code>pop temp 0</code>.</li>
+</ul>
+</li>
+<li>Compilation for other <code>do</code> statement forms discussed later (e.g., <code>do varName.methodName(...)</code>, <code>do methodName(...)</code>).</li>
+</ul>
+<h4 id="compiling-if-and-while-statements"><strong>Compiling <code>if</code> and <code>while</code> Statements</strong>:</h4>
+<ul>
+<li>High-level languages have various control flow statements (like <code>if</code>, <code>while</code>, <code>for</code>, <code>switch</code>).</li>
+<li>Low-level languages (assembly, VM) use primitives like conditional <code>goto</code> and unconditional <code>goto</code>.</li>
+<li>
+<p>Challenge: Map high-level control flow to <code>goto</code> primitives.</p>
+</li>
+<li>
+<p><strong>Compiler Logic for <code>if</code> Statements</strong>:</p>
+</li>
+<li>Upon detecting <code>if</code> keyword, the compiler expects: <code>if (expression) {statements} else {statements}</code>.</li>
+<li>Start with <code>compileExpression</code> to compute and push expression's value.</li>
+<li>Use VM command <code>not</code> to negate the expression's value.</li>
+<li>Generate a label (e.g., <code>L1</code>) and follow with VM command <code>if-goto L1</code>.</li>
+<li>
+<p>Call <code>compileStatements</code> to process the sequence of statements (e.g., <code>let</code>, <code>do</code>, <code>return</code>, <code>if</code>, <code>while</code>).</p>
+</li>
+<li>
+<p><strong>Handling Multiple Control Flows</strong>:</p>
+</li>
+<li>Programs have multiple <code>if</code> and <code>while</code> instances.</li>
+<li>
+<p>Compiler generates globally unique labels, using a running counter for distinction.</p>
+</li>
+<li>
+<p><strong>Nested Control Flows</strong>:</p>
+</li>
+<li>Control statements can be nested (e.g., <code>if</code> inside <code>while</code> inside another <code>while</code>).</li>
+<li>Handled by the recursive nature of <code>compileStatements</code>.</li>
+</ul>
+<p><img alt="Pasted image 20231010063102" src="../../../assets/Pasted%20image%2020231010063102.png"></p>
+<h3 id="compiling-objects">Compiling Objects</h3>
+<ul>
+<li>
+<p><strong>Object Handling in Object-Oriented Languages</strong>:</p>
+<ul>
+<li>Aggregate abstractions named objects.</li>
+<li>Each object: a memory block referenced by static, field, local, or argument variables.</li>
+<li>Reference variable (also object variable or pointer) contains the memory block’s base address.</li>
+</ul>
+</li>
+<li>
+<p><strong>Method Calls on Objects</strong>:</p>
+<ul>
+<li>Many objects might exist on the heap.</li>
+<li>Method call format: <code>p.foo()</code> to call method <code>foo</code> on object <code>p</code>.</li>
+<li>Inside method, current object referred to as <code>this</code>.</li>
+<li>Method's VM commands referencing <code>this</code> (e.g., <code>this 0</code>, <code>this 1</code>) should affect the called object’s fields.</li>
+</ul>
+</li>
+<li>
+<p><strong>VM Mechanism for Object-Method Alignment</strong>:</p>
+<ul>
+<li>Virtual machine uses two-valued pointer segment (THIS and THAT) for this alignment.</li>
+<li>Pointer THIS (pointer 0) holds the base address for the memory segment <code>this</code>.</li>
+<li>Align <code>this</code> segment with object <code>p</code> by pushing p’s address to the stack and popping it into pointer 0.</li>
+</ul>
+</li>
+</ul>
+<h4 id="compiling-constructor-calls">Compiling Constructor Calls</h4>
+<ul>
+<li><strong>Introduction to Object Construction in OOP</strong>:</li>
+<li>Objects created by constructors.</li>
+<li>Constructors handle both variable declaration (e.g., <code>var Point p</code>) and object instantiation (e.g., <code>let p = Point.new(2,3)</code>).</li>
+<li>
+<p>Even if done in one statement, the action divides into declaration and construction.</p>
+</li>
+<li>
+<p><strong>Deep Dive into Object Construction</strong>:</p>
+</li>
+<li><code>let p = Point.new(2,3)</code> implies:<ul>
+<li>Allocation of two-word memory block for a new Point instance.</li>
+<li>Initialization of block words to 2 and 3.</li>
+<li><code>p</code> references base address of the block.</li>
+</ul>
+</li>
+<li>Assumptions:<ul>
+<li>Constructor knows memory block size.</li>
+<li>Constructor returns the base address of the memory block upon completion.</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231010064415" src="../../../assets/Pasted%20image%2020231010064415.png"></p>
+<ul>
+<li>Caller declares two object variables.</li>
+<li>Calls a class constructor to construct the objects.</li>
+<li>Constructor allocates memory blocks for objects.</li>
+<li>
+<p>Calling code makes object variables reference these memory blocks.</p>
+</li>
+<li>
+<p><strong>Three Key Observations from Figure 11.7</strong>:</p>
+<ul>
+<li>Compilation of <code>let p = Point.new(2,3)</code> and <code>let p = Point.new(5,7)</code> is standard. What's unique is the implicit object construction.</li>
+<li>Physical addresses (6012 and 9543) don't matter to high-level or VM code. Symbolic references (<code>p1</code>, <code>p2</code>, <code>local 0</code>, <code>local 1</code>) are used, which makes programs relocatable and safer.</li>
+<li>During compile-time: symbol table updates and low-level code generates. Object construction and variable binding occur at run-time when the compiled code executes.</li>
+</ul>
+</li>
+</ul>
+<h4 id="compiling-constructors">Compiling Constructors</h4>
+<ul>
+<li><strong>Overview of Constructor Compilation</strong>:<ul>
+<li>Constructors seen as black box abstractions so far.</li>
+<li>But a constructor is essentially a subroutine, with special tasks:<ul>
+<li>Creates a new object.</li>
+<li>Makes that new object the current object (<code>this</code>).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231010065106" src="../../../assets/Pasted%20image%2020231010065106.png"></p>
+<ul>
+<li>
+<p><strong>Creating a New Object</strong>:</p>
+<ul>
+<li>Find free RAM block of sufficient size.</li>
+<li>Mark that block as used.</li>
+<li>Tasks outsourced to the host OS.</li>
+<li>OS API <code>Memory.alloc(size)</code> returns a block’s base address.</li>
+<li>Constructor’s task: Use <code>alloc</code> to get memory, <code>deAlloc</code> for release.</li>
+</ul>
+</li>
+<li>
+<p><strong>Determining Size for Memory Allocation</strong>:</p>
+<ul>
+<li>Computed from class-level symbol table.</li>
+<li>Example: <code>Point</code> class, with <code>x</code> and <code>y</code>, needs size 2.</li>
+<li>Compiler thus pushes <code>constant 2</code>, then calls <code>Memory.alloc 1</code> for the <code>Memory.alloc(2)</code> function call.</li>
+<li>Once memory is allocated, its base address is set as <code>THIS</code> for the constructor.</li>
+</ul>
+</li>
+<li>
+<p><strong>After Memory Alignment</strong>:</p>
+<ul>
+<li>Code generation becomes straightforward.</li>
+<li><code>let</code> statement example: <code>x</code> maps to <code>this 0</code> and <code>ax</code> to <code>argument 0</code>.</li>
+<li>The alignment ensures <code>push/pop this i</code> commands interact with correct RAM locations.</li>
+</ul>
+</li>
+<li>
+<p><strong>Ending a Constructor</strong>:</p>
+<ul>
+<li>Jack specification dictates ending with <code>return this</code>.</li>
+<li>Pushes <code>THIS</code>, the base address of the object, onto the stack.</li>
+<li>In other languages (e.g., Java), while constructors might not explicitly end with <code>return this</code>, their compiled version performs the same VM-level action.</li>
+<li>On constructor termination, the variable from the caller side holds the base address of the newly constructed object.</li>
+</ul>
+</li>
+</ul>
+<h4 id="compiling-method-calls">Compiling Method Calls</h4>
+<ul>
+<li>
+<p><strong>Procedural vs. Object-Oriented Methods</strong>:</p>
+<ul>
+<li>Procedural (e.g., C-style): Function call syntax like <code>distance(p1,p2)</code>.</li>
+<li>Object-Oriented: Method call syntax like <code>p1.distance(p2)</code>.<ul>
+<li>Methods always operate on a specific object.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Object-Oriented Abstractions</strong>:</p>
+<ul>
+<li>Objects are assumed to encapsulate their operations. For instance:<ul>
+<li>A <code>Point</code> object can compute its distance to another <code>Point</code>.</li>
+</ul>
+</li>
+<li>Compilers actualize these high-level abstractions.</li>
+<li>Target VM language doesn't inherently understand objects or methods.</li>
+<li>The compiler translates object-oriented method calls to a procedural style.<ul>
+<li>Example: <code>p1.distance(p2)</code> becomes <code>push p1, push p2, call distance</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Jack's Method Calls</strong>:</p>
+<ul>
+<li>Jack supports two kinds of method calls.</li>
+<li>Method calls with a variable name:</li>
+<li>Syntax: <code>varName.methodName(exp1, exp2, …, expn)</code>.</li>
+<li>Compile by:<ul>
+<li>Push the variable name (after symbol table mapping).</li>
+<li>If no variable name is mentioned, push the mapping of <code>this</code>.</li>
+<li>Call <code>compileExpressionList</code> which in turn calls <code>compileExpression</code> for each expression in the parentheses.</li>
+<li>Lastly, generate <code>call className.methodName</code> with the number of arguments.</li>
+</ul>
+</li>
+<li>Argument-less method call special case:</li>
+<li>Translated into <code>call className.methodName 1</code>.</li>
+<li>The <code>className</code> is derived from the symbol table type of the <code>varName</code>.</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231010073511" src="../../../assets/Pasted%20image%2020231010073511.png"></p>
+<h4 id="compiling-methods">Compiling Methods</h4>
+<ul>
+<li>Methods, like <code>distance</code>, are seen from the caller's perspective.</li>
+<li>In Java and Jack, methods operate on the "current object" using the <code>this</code> identifier.</li>
+<li>It's possible to write methods without explicitly using <code>this</code>.</li>
+<li>In Jack, direct object.field operations aren't supported.<ul>
+<li>Fields are accessed via accessor and mutator methods.</li>
+<li>Example: Instead of <code>x - other.x</code>, Jack uses <code>x - other.getx()</code>.</li>
+</ul>
+</li>
+<li>Jack's compiler identifies fields using symbol tables.<ul>
+<li>The current object's representation is the first passed argument.</li>
+<li>In context, the object whose method is being called has its base address as argument 0.</li>
+</ul>
+</li>
+<li>This abstraction allows methods to be applied to objects in languages like Java, Python, and Jack.</li>
+<li>During compilation:<ol>
+<li>A method call looks like <code>p1.distance(p2)</code>.</li>
+<li>The callee's compiled code starts by pointing to the object with <code>push argument 0</code>, then <code>pop pointer 0</code>.</li>
+<li>This sets the method's <code>THIS</code> pointer to the called object's base address.</li>
+<li>The <code>this</code> segment in the method aligns with the called object's base address.</li>
+<li>Commands like <code>push this 0</code> align correctly with the object's fields.</li>
+<li>Expressions translate accordingly, e.g., <code>x - other.getx()</code> becomes <code>push this 0, push argument 1, call Point.getx 1, sub</code>.</li>
+<li>The <code>THIS</code> alignment guarantees accurate targeting of the object's fields.</li>
+</ol>
+</li>
+</ul>
+<p><img alt="Pasted image 20231010074915" src="../../../assets/Pasted%20image%2020231010074915.png"></p>
+<h3 id="compiling-arrays">Compiling Arrays</h3>
+<ul>
+<li>
+<p><strong>Arrays in Jack</strong>:</p>
+<ul>
+<li>Arrays in Jack are treated as objects.</li>
+<li>Implemented as instances of the Array class in the OS.</li>
+<li>Arrays differ from objects due to index-based element access.</li>
+</ul>
+</li>
+<li>
+<p><strong>Compiler Role</strong>:</p>
+<ul>
+<li>Translates array abstractions to concrete code.</li>
+<li><code>arr[i]</code> can be represented as a memory address.</li>
+<li>Compiler's job: Translate high-level array operations to low-level commands.</li>
+</ul>
+</li>
+<li>
+<p><strong>Compilation Strategy</strong>:</p>
+<ul>
+<li>To get the physical address of <code>arr[i]</code>: <code>push arr</code>, <code>push i</code>, <code>add</code>.</li>
+<li>Store the result using <code>pop pointer 1</code>.</li>
+<li>Allows operations like <code>push that 0</code> and <code>pop x</code>.</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231010080124" src="../../../assets/Pasted%20image%2020231010080124.png"></p>
+<ul>
+<li>
+<p><strong>Flaw in the Strategy</strong>:</p>
+<ul>
+<li>Works for expressions like <code>let x = arr[i]</code>.</li>
+<li>Fails for indexed assignments, e.g., <code>let arr[i] = x</code>.</li>
+<li>Issue: The value in pointer 1 is overridden, losing <code>a[i]</code>'s address.</li>
+</ul>
+</li>
+<li>
+<p><strong>Solution</strong>:</p>
+<ul>
+<li>Generate commands: <code>push arr</code>, <code>compileExpression</code>, <code>add</code>.</li>
+<li>Store the address <code>(arr + expression1)</code> on the stack.</li>
+<li>Save the resulting value (e.g., using <code>pop temp 0</code>).</li>
+<li>This allows operations like <code>pop pointer 1</code>, <code>push temp 0</code>, <code>pop that 0</code>.</li>
+<li>The strategy can handle recursive complexity</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231010080137" src="../../../assets/Pasted%20image%2020231010080137.png"></p>
+<h2 id="implementation">Implementation</h2>
+<h3 id="standard-mapping">Standard Mapping</h3>
+<h4 id="naming-conventions"><strong>Naming Conventions</strong>:</h4>
+<ul>
+<li>Jack file <code>Xxx.jack</code> becomes VM file <code>Xxx.vm</code>.</li>
+<li>Subroutine <code>yyy</code> in <code>Xxx.jack</code> is compiled into VM function <code>Xxx.yyy</code>.</li>
+</ul>
+<h4 id="mapping-variables"><strong>Mapping Variables</strong>:</h4>
+<ul>
+<li>Static variables in class: <code>static 0</code>, <code>static 1</code>, <code>static 2</code>, ...</li>
+<li>Field variables in class: <code>this 0</code>, <code>this 1</code>, <code>this 2</code>, ...</li>
+<li>Local variables in subroutine: <code>local 0</code>, <code>local 1</code>, <code>local 2</code>, ...</li>
+<li>Arguments in function/constructor: <code>argument 0</code>, <code>argument 1</code>, ...</li>
+<li>Arguments in method: <code>argument 1</code>, <code>argument 2</code>, <code>argument 3</code>, ... (since <code>arg 0</code> is the base address of the caller)</li>
+</ul>
+<h4 id="mapping-object-fields"><strong>Mapping Object Fields</strong>:</h4>
+<ul>
+<li>Use <code>push argument 0, pop pointer 0</code> to align virtual segment <code>this</code> with the passed object.</li>
+</ul>
+<h4 id="mapping-array-elements"><strong>Mapping Array Elements</strong>:</h4>
+<ul>
+<li>Reference <code>arr[expression]</code> is compiled by setting <code>pointer 1</code> to <code>(arr + expression)</code> and accessing <code>that 0</code>.</li>
+</ul>
+<h4 id="mapping-constants"><strong>Mapping Constants</strong>:</h4>
+<ul>
+<li>Jack's <code>null</code> and <code>false</code>: <code>push constant 0</code>.</li>
+<li>Jack's <code>true</code>: <code>push constant 1, neg</code> (pushes value -1 to the stack).</li>
+<li>Jack's <code>this</code>: <code>push pointer 0</code> (pushes the base address of the current object).</li>
+</ul>
+<h3 id="implementation-guidelines">Implementation Guidelines</h3>
+<h4 id="handling-identifiers"><strong>Handling Identifiers</strong>:</h4>
+<ul>
+<li>Use symbol tables for naming variables.</li>
+<li>Any identifier not in the symbol tables is likely a subroutine or a class name.</li>
+</ul>
+<h4 id="compiling-expressions_1">Compiling Expressions:</h4>
+<ul>
+<li>The <code>compileExpression</code> routine processes input in the sequence: <code>term op term op term ...</code>.</li>
+<li>Use the <code>codeWrite</code> algorithm, enhanced to handle all terms from the Jack grammar.</li>
+<li>Most compilation action happens during the compilation of underlying terms.</li>
+<li>Subroutine calls should be managed by the compilation of terms.</li>
+<li>The expression grammar and its corresponding routine are recursive.<ul>
+<li>If a left parenthesis is detected, <code>compileExpression</code> should recursively call itself for the inner expression.</li>
+</ul>
+</li>
+<li>Jack supports no operator priority, except the priority rule. </li>
+<li>e.g., For parentheses, evaluate the inner expression first.</li>
+<li>
+<p>Handling operator priority is an optional compiler-specific extension, not a standard Jack feature.</p>
+</li>
+<li>
+<p><strong>Compilation Examples</strong>:</p>
+<ul>
+<li>Expression <code>x * y</code>: Compile to <code>push x, push y, call Math.multiply 2</code>.</li>
+<li>Expression <code>x / y</code>: Compile to <code>push x, push y, call Math.divide 2</code>.</li>
+</ul>
+</li>
+</ul>
+<h4 id="compiling-strings_1"><strong>Compiling Strings</strong>:</h4>
+<ul>
+<li>String constant "ccc … c" is managed by:
+    i. Pushing string length on stack and calling the <code>String.new</code> constructor.
+    ii. Pushing character code of c on stack and invoking <code>String.appendChar</code> for each character.<ul>
+<li>The <code>new</code> constructor and <code>appendChar</code> method push the string object back onto the stack.</li>
+</ul>
+</li>
+</ul>
+<h4 id="compiling-function-calls-and-constructor-calls"><strong>Compiling Function Calls and Constructor Calls</strong>:</h4>
+<ul>
+<li>For functions/constructors with n arguments:
+    i. Call <code>compileExpressionList</code> (which will call <code>compileExpression</code> n times).
+    ii. Make the call, indicating n arguments were pushed.</li>
+</ul>
+<h4 id="compiling-method-calls_1"><strong>Compiling Method Calls</strong>:</h4>
+<ul>
+<li>For methods with n arguments:
+    i. Push a reference to the object the method operates on.
+    ii. Call <code>compileExpressionList</code> (calling <code>compileExpression</code> n times).
+    iii. Make the call, noting arguments were pushed.</li>
+</ul>
+<h4 id="compiling-do-statements_1"><strong>Compiling do Statements</strong>:</h4>
+<ul>
+<li>Treat <code>do subroutineCall</code> as <code>do expression</code> and remove the top stack value using <code>pop temp 0</code>.</li>
+</ul>
+<h4 id="compiling-classes"><strong>Compiling Classes</strong>:</h4>
+<ul>
+<li>On class compile start, initialize class-level symbol table with field and static variables. Also, create an empty subroutine-level symbol table.</li>
+</ul>
+<h4 id="compiling-subroutines"><strong>Compiling Subroutines</strong>:</h4>
+<ul>
+<li>Initialize the subroutine’s symbol table.</li>
+<li>If a method, map <this classname arg> in the table.</this></li>
+<li>Add parameters and local variables to the table.</li>
+<li>Start generating code with the <code>function className.subroutineName nVars</code> command.</li>
+<li>If it's a method, generate code to align the 'this' segment with the object base address.</li>
+</ul>
+<h4 id="compiling-constructors_1"><strong>Compiling Constructors</strong>:</h4>
+<ul>
+<li>Perform actions as in subroutine compilation.</li>
+<li>Generate code for memory allocation and alignment.</li>
+<li>The constructor ends by returning the new object's base address.</li>
+</ul>
+<h4 id="compiling-void-methods-and-void-functions"><strong>Compiling Void Methods and Void Functions</strong>:</h4>
+<ul>
+<li>VM functions should push a value onto the stack before returning.</li>
+<li>Void methods/functions end with <code>push constant 0, return</code>.</li>
+</ul>
+<h4 id="compiling-arrays_1"><strong>Compiling Arrays</strong>:</h4>
+<ul>
+<li>Statements like <code>let arr[expression1] = expression2</code> are compiled as described earlier</li>
+<li>There's no need to use 'that' entries with an index greater than 0 when dealing with arrays.</li>
+</ul>
+<h3 id="software-architecture">Software Architecture</h3>
+<ul>
+<li><code>JackCompiler</code>: main program, sets up and invokes the other modules </li>
+<li><code>JackTokenizer</code>: tokenizer for the Jack language </li>
+<li><code>SymbolTable</code>: keeps track of all the variables found in the Jack code </li>
+<li><code>VMWriter</code>: writes VM code </li>
+<li><code>CompilationEngine</code>: recursive top-down compilation engine</li>
+</ul>
+<h4 id="symbol-table_1">Symbol Table</h4>
+<p><img alt="figure_wo_caption_11.3" src="../../../assets/Images/figure_wo_caption_11.3.png"></p>
+<h4 id="vmwriter">VMWriter</h4>
+<p><img alt="figure_wo_caption_11.4" src="../../../assets/Images/figure_wo_caption_11.4.png"></p>
+<h4 id="compilationengine">CompilationEngine</h4>
+<p><img alt="figure_wo_caption_11.5" src="../../../assets/Images/figure_wo_caption_11.5.png"></p>
+<h5 id="examples">Examples</h5>
+<p><img alt="Pasted image 20231016181823" src="../../../assets/Pasted%20image%2020231016181823.png"></p>
+<p><img alt="Pasted image 20231016182618" src="../../../assets/Pasted%20image%2020231016182618.png"></p>
+<ul>
+<li>Be sure to add this as <code>arg 0</code> for methods, this is also why the actual arguments are offset 1 more than if they were in a function</li>
+</ul>
+<p><img alt="Pasted image 20231016184223" src="../../../assets/Pasted%20image%2020231016184223.png"></p>
+<ul>
+<li>Its the second option.</li>
+</ul>
+<p><img alt="Pasted image 20231016184538" src="../../../assets/Pasted%20image%2020231016184538.png"></p>
+<p><img alt="Pasted image 20231016184605" src="../../../assets/Pasted%20image%2020231016184605.png"></p>
+<ul>
+<li>Arg 0 always refers to the object itself when calling a method, this allows you to access local field variables through the this keyword</li>
+</ul>
+<p><img alt="Pasted image 20231016184656" src="../../../assets/Pasted%20image%2020231016184656.png"></p>
+<ul>
+<li>For the constructor, we call the mem alloc function with the size of the class (1 in this case because we have 1 field variable)</li>
+<li>Then we push the initial variables in that object, push the pointer to the object back on the stack and return it</li>
+</ul>
+<p><img alt="Pasted image 20231019125920" src="../../../assets/Pasted%20image%2020231019125920.png"></p>
+<p><img alt="Pasted image 20231019142809" src="../../../assets/Pasted%20image%2020231019142809.png"></p>
+<ul>
+<li>Wrong class name</li>
+<li>Need to say whether static or field</li>
+<li>Need to add function or method before declaration</li>
+</ul>
+<p><img alt="Pasted image 20231019143341" src="../../../assets/Pasted%20image%2020231019143341.png"></p>
+<p><code>int "43", name "bobis50", int "99", name "balloons"</code></p></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

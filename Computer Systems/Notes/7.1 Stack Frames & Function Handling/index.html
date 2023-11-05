@@ -1,0 +1,1874 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../6.1%20Stack%20Machines%20%26%20Arithmetic/">
+      
+      
+        <link rel="next" href="../8.1%20High%20Level%20Languages/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>7.1 Stack Frames & Function Handling - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#run-time-system" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              7.1 Stack Frames & Function Handling
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#run-time-system" class="md-nav__link">
+    Run Time System
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-magic" class="md-nav__link">
+    High Level Magic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branching" class="md-nav__link">
+    Branching
+  </a>
+  
+    <nav class="md-nav" aria-label="Branching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unconditional-branching" class="md-nav__link">
+    Unconditional Branching
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditional-branching" class="md-nav__link">
+    Conditional Branching
+  </a>
+  
+    <nav class="md-nav" aria-label="Conditional Branching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-hypot" class="md-nav__link">
+    Example - hypot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#working-through-foobar" class="md-nav__link">
+    Working Through foobar
+  </a>
+  
+    <nav class="md-nav" aria-label="Working Through foobar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-factorial" class="md-nav__link">
+    Example - factorial()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specification-of-vm-language" class="md-nav__link">
+    Specification of VM Language
+  </a>
+  
+    <nav class="md-nav" aria-label="Specification of VM Language">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#branching-commands" class="md-nav__link">
+    Branching Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-commands" class="md-nav__link">
+    Function Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-program" class="md-nav__link">
+    VM Program
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#program-entry-point" class="md-nav__link">
+    Program Entry Point
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#program-execution" class="md-nav__link">
+    Program Execution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-of-vm-language" class="md-nav__link">
+    Implementation of VM Language
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation of VM Language">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-call-and-return" class="md-nav__link">
+    Function Call and Return
+  </a>
+  
+    <nav class="md-nav" aria-label="Function Call and Return">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#callers-perspective" class="md-nav__link">
+    Caller's Perspective
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callees-perspective" class="md-nav__link">
+    Callee's Perspective
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-perspective" class="md-nav__link">
+    VM Perspective
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-mapping-on-the-hack-platform-pt-ii" class="md-nav__link">
+    VM Mapping on The Hack Platform pt. II
+  </a>
+  
+    <nav class="md-nav" aria-label="VM Mapping on The Hack Platform pt. II">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-stack" class="md-nav__link">
+    The Stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-symbols" class="md-nav__link">
+    Special Symbols
+  </a>
+  
+    <nav class="md-nav" aria-label="Special Symbols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-pointdemo" class="md-nav__link">
+    Example - PointDemo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bootstrap-code" class="md-nav__link">
+    Bootstrap Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design" class="md-nav__link">
+    Design
+  </a>
+  
+    <nav class="md-nav" aria-label="Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vm-translator" class="md-nav__link">
+    VM Translator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    Parser
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codewriter" class="md-nav__link">
+    CodeWriter
+  </a>
+  
+    <nav class="md-nav" aria-label="CodeWriter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#run-time-system" class="md-nav__link">
+    Run Time System
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-magic" class="md-nav__link">
+    High Level Magic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branching" class="md-nav__link">
+    Branching
+  </a>
+  
+    <nav class="md-nav" aria-label="Branching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unconditional-branching" class="md-nav__link">
+    Unconditional Branching
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditional-branching" class="md-nav__link">
+    Conditional Branching
+  </a>
+  
+    <nav class="md-nav" aria-label="Conditional Branching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-hypot" class="md-nav__link">
+    Example - hypot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#working-through-foobar" class="md-nav__link">
+    Working Through foobar
+  </a>
+  
+    <nav class="md-nav" aria-label="Working Through foobar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-factorial" class="md-nav__link">
+    Example - factorial()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specification-of-vm-language" class="md-nav__link">
+    Specification of VM Language
+  </a>
+  
+    <nav class="md-nav" aria-label="Specification of VM Language">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#branching-commands" class="md-nav__link">
+    Branching Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-commands" class="md-nav__link">
+    Function Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-program" class="md-nav__link">
+    VM Program
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#program-entry-point" class="md-nav__link">
+    Program Entry Point
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#program-execution" class="md-nav__link">
+    Program Execution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-of-vm-language" class="md-nav__link">
+    Implementation of VM Language
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation of VM Language">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-call-and-return" class="md-nav__link">
+    Function Call and Return
+  </a>
+  
+    <nav class="md-nav" aria-label="Function Call and Return">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#callers-perspective" class="md-nav__link">
+    Caller's Perspective
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callees-perspective" class="md-nav__link">
+    Callee's Perspective
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-perspective" class="md-nav__link">
+    VM Perspective
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-mapping-on-the-hack-platform-pt-ii" class="md-nav__link">
+    VM Mapping on The Hack Platform pt. II
+  </a>
+  
+    <nav class="md-nav" aria-label="VM Mapping on The Hack Platform pt. II">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-stack" class="md-nav__link">
+    The Stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-symbols" class="md-nav__link">
+    Special Symbols
+  </a>
+  
+    <nav class="md-nav" aria-label="Special Symbols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-pointdemo" class="md-nav__link">
+    Example - PointDemo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bootstrap-code" class="md-nav__link">
+    Bootstrap Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design" class="md-nav__link">
+    Design
+  </a>
+  
+    <nav class="md-nav" aria-label="Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vm-translator" class="md-nav__link">
+    VM Translator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    Parser
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codewriter" class="md-nav__link">
+    CodeWriter
+  </a>
+  
+    <nav class="md-nav" aria-label="CodeWriter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>7.1 Stack Frames & Function Handling</h1>
+
+<div><h2 id="run-time-system">Run Time System</h2>
+<ul>
+<li>Controls:<ul>
+<li>How to start program execution</li>
+<li>How to handle program termination</li>
+<li>How to pass function arguments</li>
+<li>How to allocate and free memory resources</li>
+</ul>
+</li>
+<li>Realised via VM translator and its subsequent commands - <code>pop, push, add, etc</code><ul>
+<li>Along with this, some sort of ‘wrapper’ that acts as a sort of ‘main’ function for everything to work together</li>
+</ul>
+</li>
+</ul>
+<h2 id="high-level-magic">High Level Magic</h2>
+<ul>
+<li>Allow writing programs in high level terms </li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>x=-b+sqrt(power(b,2)-4*a*c)
+</span></code></pre></div>
+<ul>
+<li>Primitive operations like <code>+ and -</code> are built into the basic syntax, whereas <code>sqrt and power</code> are extensions of the language</li>
+<li>High level languages allow us to never have to worry about how things like this get executed and how we execute multiple things one after another</li>
+<li>Similarly, high level code abstracts away the ability to branch between logic - conditional execution</li>
+<li>The overhead of functions are also abstracted away. Behind the scenes, it needs to:<ul>
+<li>Save the return address (address in memory to return to once a function finishes executing)</li>
+<li>Save memory resources of the caller</li>
+<li>Allocate memory resources needed by the callee</li>
+<li>Make arguments from caller memory available to callee</li>
+<li>Execute the callee’s code</li>
+<li>Make the callee’s return value available to caller’s code</li>
+<li>Free the memory used by the callee</li>
+<li>Reinstate the saved memory from the caller</li>
+<li>Resume executing from the return address we initially saved</li>
+</ul>
+</li>
+<li>The compiler or VM translator handles all of these things without the programmer ever having to worry about it</li>
+</ul>
+<h2 id="branching">Branching</h2>
+<ul>
+<li>By default, programs execute sequentially (one instruction after the other)</li>
+<li>We can ‘redirect’ this execution, a for loop, via branching<ul>
+<li>Implemented using <code>goto</code> in assembly programming languages, followed by physical memory address of next instruction, or a symbolic label bound to an address</li>
+</ul>
+</li>
+<li>VM language supports <em>conditional and unconditional</em> branching</li>
+</ul>
+<h3 id="unconditional-branching">Unconditional Branching</h3>
+<ul>
+<li>Using <code>goto</code>, we jump to execute the command just after the label symbol</li>
+</ul>
+<h3 id="conditional-branching">Conditional Branching</h3>
+<ul>
+<li>Using <code>if-goto</code>, we pop the stack<ul>
+<li>If it’s true,  jump to the command after the label symbol</li>
+<li>If it’s false, execute the next command in the code</li>
+</ul>
+</li>
+<li>We need to specify this condition before the <code>if-goto</code> command</li>
+</ul>
+<h5 id="examples">Examples</h5>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>if (n&lt;100) goto LOOP
+</span></code></pre></div></li>
+</ol>
+<p>becomes:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>push n
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>push 100
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>lt
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>if-goto LOOP
+</span></code></pre></div>
+<ol>
+<li>Consider a function that receives two arts <code>x and y</code> and returns their product</li>
+<li>This can be achieved by adding x repetitively to a local variable <code>sum</code>, y times and then returning sum’s value</li>
+</ol>
+<div class="language-c++ highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// Returns x*y</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kt">int</span><span class="w"> </span><span class="nf">mult</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<ul>
+<li>After being compiled into VM code, it becomes:</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>// Returns x*y
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>function mult(x,y)
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    push 0
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    push sum
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    push 0
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    pop i
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>label WHILE_LOOP
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    push i
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    push y
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    lt
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    neg
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    if-goto WHILE_END
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    push sum
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    push x
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    add
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    pop sum
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    push i
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    push i
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>    add
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>    pop i
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    goto WHILE_LOOP
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>label WHILE_END
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>    push sum
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>    return
+</span></code></pre></div>
+<ul>
+<li>Notice that we negate the result of the condition. This essentially says that we have looped all times and have achieved the condition and can now skip to 'after' the while loop</li>
+<li>This means pretty much every high level conditional <code>if / while / for / etc</code> can be realised using only <code>goto / if-goto</code> commands</li>
+</ul>
+<h2 id="functions">Functions</h2>
+<ul>
+<li>Programming languages have a set of fixed, built in operations</li>
+<li>In addition to this, they allow programmers to create their own operations (which are called functions)</li>
+<li>Both built-in and user-defined operations can be utilized in a similar manner, giving them a consistent feel in their application.<ul>
+<li>In the context of our VM, a user defined function might be <code>multiply</code>, for which we call after pushing two values onto the stack, just as we would for a built in one like <code>add</code></li>
+<li>We call user defined functions using <code>call &lt;function&gt;</code>, where as built in ones are just <code>&lt;function&gt;</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="example-hypot">Example - hypot</h5>
+<p><img alt="Ch08_IEQ_002" src="../../../assets/Ch08_IEQ_002.png"></p>
+<p><img alt="figure_8.2" src="../../../assets/Images/figure_8.2.png"></p>
+<ul>
+<li>We can see that each function operates in their own stack universe, separate from the stack from it's parent uses</li>
+<li>Arguments and return variables magically (as we will soon see) travel through wormholes to get to new / existing stacks</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<ul>
+<li>We have a <code>calling chain</code> which manages what function calls what, usually starting with main</li>
+<li>Each function in the chain waits for the function in front of it to return it a variable</li>
+<li>The last in the chain is the currently executing function</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>main -&gt; foo -&gt; bar
+</span></code></pre></div>
+<ul>
+<li>Functions have <code>local</code> and <code>argument</code> temporary variables, stored inside their own stack<ul>
+<li>When the function starts executing, the memory is allocated and then freed once finished</li>
+</ul>
+</li>
+<li>It can be realised that this is just another stack. A stack of stacks, where the first function in, is the last function out</li>
+</ul>
+<h4 id="working-through-foobar">Working Through <code>foobar</code></h4>
+<ul>
+<li>Assume the current function is <code>foo</code>:<ul>
+<li><code>foo</code> has pushed some values onto its stack and modified entries in its memory segments. Each function call creates a new frame on the stack designated for its local and argument segments.</li>
+</ul>
+</li>
+<li>When <code>foo</code> calls <code>bar</code>, it pauses its execution:<ul>
+<li>The current state (or frame) of <code>foo</code> remains on the stack, with <code>bar</code>'s frame positioned on top. </li>
+<li>Before <code>bar</code> terminates, it pushes a return value onto the stack  (stored in the first argument slot of <code>bar</code>'s stack). </li>
+<li>The <code>SP</code> (Stack Pointer) is pointed to the address immediately following this value </li>
+<li>This action effectively liberates the global stack's area beneath the new <code>SP</code> value. </li>
+<li>Consequently, when the caller (<code>foo</code>) resumes its operations, it identifies the return value at the top of its working stack.</li>
+<li>Before <code>bar</code>'s execution begins, pointers like <code>LCL, ARG, THIS, THAT</code> are saved in the beginning of <code>bar</code>'s stack frame to preserve the state of <code>foo</code>.</li>
+</ul>
+</li>
+<li>Functions can be seen as reducing complex execution to a single value (the return value). Conceptually, calling a function is akin to pushing a value onto the caller's stack.</li>
+<li>The combined set of working stacks and frames is termed the <code>global stack</code>.</li>
+</ul>
+<p><img alt="figure_8.3" src="../../../assets/Images/figure_8.3.png"></p>
+<ul>
+<li>
+<p>When a function (<code>functionName</code>) is called:</p>
+<ul>
+<li>The VM saves the current state of the caller by pushing its frame onto the stack.</li>
+<li>The start of the function is marked with a unique label derived from its name, facilitating a direct jump to execute the function's code.</li>
+<li>The generated assembly code is <code>goto &lt;functionName&gt;</code></li>
+</ul>
+</li>
+<li>
+<p>Returning control to the caller:</p>
+<ul>
+<li>The <code>return</code> command doesn't specify a return address since functions can serve any caller.</li>
+<li>The solution involves:<ul>
+<li>Saving the return address right before control transfers to the function.</li>
+<li>Retrieving this address when the function ends.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>How the <code>return</code> location is determined:</p>
+<ul>
+<li>The exact return location is known: it's immediately after where the function was called. (essentially where the first argument for the callee is stored)</li>
+<li>The VM translator places a label at this spot in the generated assembly code and pushes this label (the return address) onto the stack.</li>
+</ul>
+</li>
+<li>
+<p>When a <code>return</code> command is seen:</p>
+<ul>
+<li>The saved return address is popped off the stack.</li>
+<li>Control is then redirected back to the appropriate spot in the caller's code, ensuring smooth continuation post function call.</li>
+</ul>
+</li>
+</ul>
+<h5 id="example-factorial">Example - factorial()</h5>
+<p><img alt="figure_8.4" src="../../../assets/Images/figure_8.4.png"></p>
+<ul>
+<li>Several snapshots of stack at various points</li>
+<li>Note: When we call <code>factorial</code>, we don't get to call <code>mult</code> until that factorial function finishes, i.e. it reaches the base case (as it will keep calling itself recursively)</li>
+<li>This means once we do reach the base case, we are essentially calling <code>mult</code> back to back to back until we reach main with the return value of each of the factorial functions</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Side Note: This chapter has been incredibly therapuetic for me to read. The idea that some insane logical expression can be abstracted down to a single value which is only known by it's caller  is entirely fascinating and completely eye opening for me. I struggle with anxiety, black / white thinking and understanding that there is an entire universe of thought outside of my own is relieving on a monumental scale. 
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Main sees 6. Mult sees 3 and 2. 
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>If man is 5, then the devil is 6 and if the devil is 6, then god is 7. This monkey's gone to heaven. 
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>Those moments will be lost... in time. Like tears... in rain. Time to die.
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>I love computer science. 
+</span></code></pre></div>
+<blockquote>
+<p><em>"The implementation of the function call-and-return protocol is a beautiful example of low-level software engineering, so we can simply enjoy seeing it in action"</em></p>
+</blockquote>
+<h2 id="specification-of-vm-language">Specification of VM Language</h2>
+<ul>
+<li>Note: VM Code is compiled, not written. <ul>
+<li>\We have to understand what we have to write, before we can write it, i.e. design the compiler</li>
+</ul>
+</li>
+</ul>
+<h3 id="branching-commands">Branching Commands</h3>
+<ul>
+<li><code>label &lt;name&gt;</code> <ul>
+<li>Marks the current position in the function's code.</li>
+<li>Scope is limited to the defining function.</li>
+<li>Composed of letters, digits (not starting), dots, colons, or underscores.</li>
+</ul>
+</li>
+<li><code>goto &lt;label&gt;</code><ul>
+<li>Jumps to the specified label within the same function.</li>
+</ul>
+</li>
+<li><code>if-goto &lt;label&gt;</code><ul>
+<li>Conditionally jumps to the label if the top stack value (most recent) is truthy (-1).</li>
+<li>Otherwise, continues to the next command.</li>
+</ul>
+</li>
+</ul>
+<h3 id="function-commands">Function Commands</h3>
+<ul>
+<li><code>function &lt;functionName&gt; nVars</code>: <ul>
+<li>Starts a function named <code>functionName</code>.</li>
+<li>Declares <code>nVars</code> local variables.</li>
+</ul>
+</li>
+<li><code>call functionName nArgs</code>: <ul>
+<li>Calls <code>functionName</code>.</li>
+<li>Assumes <code>nArgs</code> arguments are already on the stack.</li>
+</ul>
+</li>
+<li><code>return</code>: <ul>
+<li>Resumes execution after the call command of the calling function.</li>
+</ul>
+</li>
+<li>Note: <code>nVars</code> and <code>nArgs</code> is not # args, it's just the collection of args / vars</li>
+</ul>
+<h3 id="vm-program">VM Program</h3>
+<ul>
+<li>Generated from high level programs like <em>Jack</em></li>
+<li>Each high level class file <code>File.jack</code> is translated into a corresponding file with VM commands <code>File.vm</code></li>
+<li>Within each class, each function is translated into a VM function <code>File.Function</code><ul>
+<li>Each of these VM functions can see every other VM function and call each other regardless of file (ie. they’re global)</li>
+</ul>
+</li>
+</ul>
+<h3 id="program-entry-point">Program Entry Point</h3>
+<ul>
+<li>Must exist a main <code>jack</code> class to create a <code>main.vm</code> file which holds a <code>main.main</code> function<ul>
+<li>This is the entry point of the program</li>
+</ul>
+</li>
+<li>Start by calling <code>Sys.init</code>, which then calls <code>main.main</code></li>
+</ul>
+<h3 id="program-execution">Program Execution</h3>
+<ul>
+<li>Executed using the VM emulator (amongst other means)<ul>
+<li>Load a folder of <code>.vm</code> files, the order of loaded files is significant</li>
+<li>Resulting code base is a collection of the functions inside the <code>.vm</code> files</li>
+<li>On detection of an OS function, <code>Math.sqrt</code> for example, it will try to find the function in the VM code, otherwise it will use the built in version of that function</li>
+<li>OS is built into  the emulator, so no need to implement OS calls</li>
+</ul>
+</li>
+</ul>
+<h2 id="implementation-of-vm-language">Implementation of VM Language</h2>
+<ul>
+<li>VM 2 Hack here we go</li>
+</ul>
+<h3 id="function-call-and-return">Function Call and Return</h3>
+<ul>
+<li>Executed harmoniously by <em>caller</em> and <em>callee</em><ul>
+<li>The expectations of one is fulfilled by the other</li>
+<li>The VM implementation supports this by controlling the global stack</li>
+</ul>
+</li>
+</ul>
+<h4 id="callers-perspective">Caller's Perspective</h4>
+<ul>
+<li>Needs to push expected arguments <code>nArgs</code> for callee onto the stack</li>
+<li>Call the callee function <code>fileName.functionName nArgs</code></li>
+<li>Callee returns, argument values that were pushed have disappeared and a return value has been pushed into the stack. Everything else is the same as it was left</li>
+<li><code>static</code> memory segment might have changed, everything else is the same and <code>temp</code> is undefined</li>
+</ul>
+<h4 id="callees-perspective">Callee's Perspective</h4>
+<ul>
+<li>My <code>argument</code> segments have been filled with values passed by the caller</li>
+<li>My <code>local</code> segments have been allocated and set to 0</li>
+<li>My <code>static</code> segment has been set to <code>static</code> segment of my parent VM file</li>
+<li>My working stack is empty</li>
+<li><code>this, that, pointer and temp</code> are undefined</li>
+<li>Before <code>return</code>, I push a a return value onto the stack</li>
+</ul>
+<h4 id="vm-perspective">VM Perspective</h4>
+<ul>
+<li>Maintains the global stack</li>
+<li>Every <code>function</code>, <code>call</code> and <code>return</code> is handled by generating assembly that manipulates the global stack<ul>
+<li><code>call</code> generates code that saves the frame of the caller on the stack and jumps to execute callee</li>
+<li><code>function</code> generates code that initialises the local variables of the callee</li>
+<li><code>return</code> generates code that copes the return value to the top of the caller's working stack, reinstates segment pointers of the caller and jumps to execute from the return address onward</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_8.5" src="../../../assets/Images/figure_8.5.png"></p>
+<h3 id="vm-mapping-on-the-hack-platform-pt-ii">VM Mapping on The Hack Platform pt. II</h3>
+<h4 id="the-stack">The Stack</h4>
+<ul>
+<li>RAM locations 0-15 are reserved for pointers and registers</li>
+<li>RAM locations 16-255 are reserved for static variables</li>
+<li>Stack is mapped from address 256 onwards<ul>
+<li>VM sets <code>SP</code> to <code>256</code></li>
+</ul>
+</li>
+<li>Commands like <code>pop, push, add, etc</code> generate assembly code that manipulates the data stored in the address pointed to by <code>SP</code></li>
+</ul>
+<h4 id="special-symbols">Special Symbols</h4>
+<ul>
+<li>When generating assembly from VM commands, predefined symbols like <code>SP</code>, <code>LCL</code> and <code>ARG</code> are handled first</li>
+<li>Function entry points and return addresses are generated next</li>
+</ul>
+<p><img alt="figure_8.6" src="../../../assets/Images/figure_8.6.png"></p>
+<h5 id="example-pointdemo">Example - PointDemo</h5>
+<ul>
+<li>The <code>PointDemo</code> program has two Jack class files: <code>Main.jack</code> and <code>Point.jack</code>.</li>
+<li>When compiled, these produce two VM files: <code>Main.vm</code> and <code>Point.vm</code>.<ul>
+<li><code>Main.vm</code> contains the <code>Main.main</code> function.</li>
+<li><code>Point.vm</code> contains functions like <code>Point.new</code>, <code>Point.getx</code>, and <code>Point.print</code>.</li>
+</ul>
+</li>
+<li>Using the VM translator on the <code>PointDemo</code> folder creates one assembly code file: <code>PointDemo.asm</code>.<ul>
+<li>At this level, function abstractions are gone.</li>
+<li>Each function command in VM leads to an entry label in assembly.</li>
+<li>Each call command:<ol>
+<li>Generates an assembly <code>goto</code> instruction.</li>
+<li>Creates a return address label, pushes it to the stack.</li>
+<li>Injects the label into the generated code.</li>
+</ol>
+</li>
+<li>Each return command:<ul>
+<li>Pops the return address from the stack.</li>
+<li>Generates a <code>goto</code> instruction in assembly.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_wo_caption_8.1" src="../../../assets/Images/figure_wo_caption_8.1.png"></p>
+<h4 id="bootstrap-code">Bootstrap Code</h4>
+<ul>
+<li>Recall, stack starts in RAM address 256 and execution starts with calling <code>Sys.init</code> and upon reset, load instruction in <code>ROM[0]</code></li>
+<li>To execute code on start-up, we place this code in <code>ROM[0]</code></li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>// Bootstrap (pseudo) code, should be expressed in machine language
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>SP = 256
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>call Sys.init
+</span></code></pre></div>
+<h4 id="usage">Usage</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span>VMTranslator<span class="w"> </span><span class="nb">source</span>
+</span></code></pre></div>
+<ul>
+<li>Where source is <code>source.vm</code> or a folder containing <code>.vm</code> files</li>
+<li>Output is a single assembly file <code>source.asm</code></li>
+</ul>
+<h3 id="design">Design</h3>
+<ul>
+<li>We can add more functionality to the three modules implemented in the previous chapter<ul>
+<li><code>parser, codewriter and VM Translator</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="vm-translator">VM Translator</h4>
+<ul>
+<li>Constructs a <code>parser</code> for every <code>.vm</code> file in the specified folder and a <code>codewriter</code> that creates an output file <code>prog.asm</code></li>
+<li>Enters a loop to iterate through each command in the <code>.vm</code> file<ul>
+<li>For each command, <code>codewriter</code> generates assembly code and stores it inside <code>prog.asm</code></li>
+<li>Every time a new <code>.vm</code> file is translated, a <code>codewriter</code> routine <code>setFileName</code> is called</li>
+</ul>
+</li>
+</ul>
+<h4 id="parser">Parser</h4>
+<ul>
+<li>Already fully implemented</li>
+</ul>
+<h4 id="codewriter">CodeWriter</h4>
+<p><img alt="figure_wo_caption_8.2" src="../../../assets/Images/figure_wo_caption_8.2.png"></p>
+<h5 id="examples_1">Examples</h5>
+<p><img alt="Pasted image 20230912225200" src="../../../assets/Pasted%20image%2020230912225200.png"></p>
+<p><img alt="Pasted image 20230912225210" src="../../../assets/Pasted%20image%2020230912225210.png"></p></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

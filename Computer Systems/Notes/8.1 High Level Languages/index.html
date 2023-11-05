@@ -1,0 +1,1314 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/">
+      
+      
+        <link rel="next" href="../8.2%20Jack%20Examples/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>8.1 High Level Languages - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#language-specification" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              8.1 High Level Languages
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#language-specification" class="md-nav__link">
+    Language Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Language Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntactic-elements" class="md-nav__link">
+    Syntactic Elements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#program-structure" class="md-nav__link">
+    Program Structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-types" class="md-nav__link">
+    Data Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#primitive-types" class="md-nav__link">
+    Primitive Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arrays" class="md-nav__link">
+    Arrays
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strings" class="md-nav__link">
+    Strings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#object-types" class="md-nav__link">
+    Object Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-conversions" class="md-nav__link">
+    Type Conversions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statements" class="md-nav__link">
+    Statements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressions" class="md-nav__link">
+    Expressions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subroutine-calls" class="md-nav__link">
+    Subroutine Calls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#object-construction-and-disposal" class="md-nav__link">
+    Object Construction and Disposal
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-jack-applications" class="md-nav__link">
+    Writing Jack Applications
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing Jack Applications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compilation" class="md-nav__link">
+    Compilation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#language-specification" class="md-nav__link">
+    Language Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Language Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntactic-elements" class="md-nav__link">
+    Syntactic Elements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#program-structure" class="md-nav__link">
+    Program Structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-types" class="md-nav__link">
+    Data Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#primitive-types" class="md-nav__link">
+    Primitive Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arrays" class="md-nav__link">
+    Arrays
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strings" class="md-nav__link">
+    Strings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#object-types" class="md-nav__link">
+    Object Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-conversions" class="md-nav__link">
+    Type Conversions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statements" class="md-nav__link">
+    Statements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expressions" class="md-nav__link">
+    Expressions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subroutine-calls" class="md-nav__link">
+    Subroutine Calls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#object-construction-and-disposal" class="md-nav__link">
+    Object Construction and Disposal
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-jack-applications" class="md-nav__link">
+    Writing Jack Applications
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing Jack Applications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compilation" class="md-nav__link">
+    Compilation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>8.1 High Level Languages</h1>
+
+<div><h2 id="language-specification">Language Specification</h2>
+<ul>
+<li>Jack is a high level object based programming language similar to C++ / Java</li>
+</ul>
+<h3 id="syntactic-elements">Syntactic Elements</h3>
+<ul>
+<li>Jack programs are a sequence of tokens separated by whitespace</li>
+<li>Tokens can be symbols, reserved words, constants and identifiers</li>
+</ul>
+<p><img alt="figure_9.6" src="../../../assets/Images/figure_9.6.png"></p>
+<h3 id="program-structure">Program Structure</h3>
+<ul>
+<li>Programs are a collection of classes stored in the same folder</li>
+<li>One class must be <code>Main</code> and this class must have a function <code>main</code></li>
+<li>Execution starts with the <code>Main.main</code> function</li>
+<li>Basic programming unit is a <code>class</code><ul>
+<li>Each class exists in a separate class file <code>Class.jack</code></li>
+<li>Classes start with an uppercase letter</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_wo_caption_9.1" src="../../../assets/Images/figure_wo_caption_9.1.png"></p>
+<ul>
+<li>A class declaration specifies a name which methods can be accessed <code>class.subroutine</code></li>
+<li>Contains <code>field</code> declarations for object properties and <code>static</code> declarations</li>
+<li>Then contains <code>subroutines</code><ul>
+<li><code>methods</code> operate on the current object</li>
+<li><code>functions</code> operate on the class abstraction itself, not relying on a unique object</li>
+<li><code>constructors</code> create and return new objects of the class type</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_wo_caption_9.2" src="../../../assets/Images/figure_wo_caption_9.2.png"></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>class SomeClass {
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    field int someField;
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    function void someFunction(int arg) {
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        // This is a function.
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        // It does NOT have access to someField.
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        do something();
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    }
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    method void someMethod(int arg) {
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        // This is a method.
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        // It has access to someField via the this pointer.
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        let someField = arg;  // modifies the object's field
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    }
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>}
+</span></code></pre></div>
+<ul>
+<li>Includes a <code>name</code> to be accessed by its class <code>class.name</code></li>
+<li>Includes a type to indicate what is returned by the routine (<code>void</code> if no return)<ul>
+<li>Can be any primitive, abstract or standard class data type</li>
+<li>Constructor's return type must be of the class it belongs to</li>
+</ul>
+</li>
+<li>Includes a parameter list of typed variables to be used as arguments <ul>
+<li><code>int x, boolean sign, Fraction g</code></li>
+</ul>
+</li>
+<li>Constructors can be arbitrarily named, and there may exist multiple of them<ul>
+<li>Usually called <code>new</code></li>
+</ul>
+</li>
+<li>Contains a sequence of local variable declarations <code>var</code> statements and then statements to manipulate that data</li>
+<li>Each subroutine ends with a <code>return</code> expression<ul>
+<li>Must return variable of type defined in subroutine declaration</li>
+<li><code>void</code> returns nothing <code>return;</code></li>
+<li>Constructors return object itself <code>return this</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="data-types">Data Types</h3>
+<ul>
+<li>Primitive types include<code>int, char, boolean</code></li>
+<li>Standard class types included too <code>String, Array</code></li>
+<li>Abstract data types can be created via classes and exist in the project folder</li>
+</ul>
+<h4 id="primitive-types">Primitive Types</h4>
+<ul>
+<li><code>int</code> - two's complement 16 bit integer</li>
+<li><code>char</code> - unsigned 16 bit integer</li>
+<li><code>boolean</code> - <code>true</code> or <code>false</code> expressed in 16 bits</li>
+<li>Weakly typed -  a value of any type can be assigned to a variable of any type without casting</li>
+</ul>
+<h4 id="arrays">Arrays</h4>
+<ul>
+<li>Declared using standard OS class <code>Array</code></li>
+<li>Elements accessed using <code>arr[i]</code>, index starting from 0</li>
+<li>2D arrays are arrays of type array</li>
+<li>Declaration creates a reference, <code>new</code> creates the array proper <code>Array.new(arrayLength)</code></li>
+</ul>
+<h4 id="strings">Strings</h4>
+<ul>
+<li>Arrays of <code>chars</code></li>
+<li>Contents of a <code>String</code> object accessed using <code>charAt(index)</code></li>
+</ul>
+<p><img alt="figure_wo_caption_9.4" src="../../../assets/Images/figure_wo_caption_9.4.png"></p>
+<h4 id="object-types">Object Types</h4>
+<p><img alt="figure_wo_caption_9.3" src="../../../assets/Images/figure_wo_caption_9.3.png"></p>
+<h4 id="type-conversions">Type Conversions</h4>
+<ul>
+<li>Weakly typed - any variable can be assigned any value type</li>
+<li>
+<p>Compilers may check for any errors and perform the following assignments:</p>
+</li>
+<li>
+<p><code>chars</code> can be assigned <code>ints</code> and vice versa</p>
+</li>
+</ul>
+<p><img alt="figure_wo_caption_9.5" src="../../../assets/Images/figure_wo_caption_9.5.png"></p>
+<ul>
+<li><code>ints</code> can be assigned references to objects (interpreted as a memory address)</li>
+</ul>
+<p><img alt="figure_wo_caption_9.6" src="../../../assets/Images/figure_wo_caption_9.6.png"></p>
+<ul>
+<li><code>objects</code> can be assigned to <code>Arrays</code> and vice versa</li>
+</ul>
+<p><img alt="figure_wo_caption_9.7" src="../../../assets/Images/figure_wo_caption_9.7.png"></p>
+<blockquote>
+<p>WTF?</p>
+</blockquote>
+<h3 id="variables">Variables</h3>
+<p><img alt="figure_9.7" src="../../../assets/Images/figure_9.7.png"></p>
+<ul>
+<li><code>static, local</code> variables must be initialised manually</li>
+<li><code>field</code> variables initialised by constructor (usually)</li>
+<li><code>parameter</code> variables initialised to values of arguments passed by caller</li>
+</ul>
+<h3 id="statements">Statements</h3>
+<p><img alt="figure_wo_caption_9.8" src="../../../assets/Images/figure_wo_caption_9.8.png"></p>
+<h3 id="expressions">Expressions</h3>
+<ul>
+<li>One of the following<ul>
+<li>A <code>constant</code></li>
+<li>A <code>variable</code> name in scope - can be any of the 4 types</li>
+<li><code>this</code> denoting the current object</li>
+<li><code>arr[index]</code> denoting an element within an array</li>
+<li>A <code>subroutine</code> call</li>
+</ul>
+</li>
+<li>Can be prefixed with:<ul>
+<li><code>-</code> for arithmetic negation</li>
+<li><code>~</code> for Boolean negation</li>
+</ul>
+</li>
+<li>Can be combined using operators<ul>
+<li><code>+ - * /</code> - integer arithmetic</li>
+<li><code>&amp; |</code> - Boolean <code>AND / OR</code></li>
+<li><code>&lt;&gt;=</code> - comparison</li>
+</ul>
+</li>
+<li>Can be contained in parentheses <code>(expression)</code> for <code>BODMAS</code><ul>
+<li>Parentheses must be used, otherwise expressions are evaluated left to right</li>
+</ul>
+</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>8 - 2 * 3
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>If evaluated from left to right without considering any other rules:
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>1. First, you'd subtract: 8−2=6
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>2. Then, you'd multiply: 6∗3=18
+</span></code></pre></div>
+<h3 id="subroutine-calls">Subroutine Calls</h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>className.subroutineName(arg1,arg2...)
+</span></code></pre></div>
+<ul>
+<li>Must always use <code>()</code> even if no arguments</li>
+<li>Can call methods without implying <code>className</code> if already within a subroutine of that class</li>
+</ul>
+<p><img alt="figure_wo_caption_9.9" src="../../../assets/Images/figure_wo_caption_9.9.png"></p>
+<h3 id="object-construction-and-disposal">Object Construction and Disposal</h3>
+<ul>
+<li>Two stages<ol>
+<li>A pointer to an object is declared</li>
+<li>Object's constructor is called with arguments to initialise <code>field</code> variables</li>
+</ol>
+</li>
+<li>Constructed and assigned to variables using <code>let varName = className.constructur(args)</code></li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>let c = Cirlce.new(x,y,50);
+</span></code></pre></div>
+<ul>
+<li>Can deconstruct objects using <code>Memory.deAlloc(object)</code><ul>
+<li>Every class should include a <code>dispose()</code> method that deallocates the object</li>
+</ul>
+</li>
+</ul>
+<h2 id="writing-jack-applications">Writing Jack Applications</h2>
+<h3 id="compilation">Compilation</h3>
+<ul>
+<li>All files comprising the program exist in the same directory</li>
+<li>Translates <code>.jack</code> files into their corresponding <code>.vm</code> files</li>
+<li>The program folder containing <code>.vm</code> files can be loaded into the VM emulator<ul>
+<li>No need to bundle OS <code>vm</code> files as it comes bundled within the VM emulator</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><em>Also, you may wonder why the Jack syntax includes clunky keywords like do and let, why every subroutine must end with a return statement, why the language does not enforce operator priority, and so on—you may add your favorite complaint to the list. All these somewhat tedious idiosyncrasies were introduced into Jack with one purpose: allowing the development of simple and minimal Jack compilers</em></p>
+</blockquote></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

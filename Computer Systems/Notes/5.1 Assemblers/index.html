@@ -1,0 +1,1383 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../4.1%20Computer%20Architecture/">
+      
+      
+        <link rel="next" href="../6.1%20Stack%20Machines%20%26%20Arithmetic/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>5.1 Assemblers - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#background" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              5.1 Assemblers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#translating-assembly-to-binary" class="md-nav__link">
+    Translating Assembly to Binary
+  </a>
+  
+    <nav class="md-nav" aria-label="Translating Assembly to Binary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handling-symbols" class="md-nav__link">
+    Handling Symbols
+  </a>
+  
+    <nav class="md-nav" aria-label="Handling Symbols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#predefined-symbols" class="md-nav__link">
+    Predefined Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-defined-symbols" class="md-nav__link">
+    User Defined Symbols
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-do-we-achieve-this" class="md-nav__link">
+    How do we achieve this?
+  </a>
+  
+    <nav class="md-nav" aria-label="How do we achieve this?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parse-module" class="md-nav__link">
+    Parse Module
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-module" class="md-nav__link">
+    Code Module
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hack-assembler" class="md-nav__link">
+    Hack Assembler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbol-table" class="md-nav__link">
+    Symbol Table
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialisation" class="md-nav__link">
+    Initialisation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-pass" class="md-nav__link">
+    First Pass
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-pass" class="md-nav__link">
+    Second Pass
+  </a>
+  
+    <nav class="md-nav" aria-label="Second Pass">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#translating-assembly-to-binary" class="md-nav__link">
+    Translating Assembly to Binary
+  </a>
+  
+    <nav class="md-nav" aria-label="Translating Assembly to Binary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handling-symbols" class="md-nav__link">
+    Handling Symbols
+  </a>
+  
+    <nav class="md-nav" aria-label="Handling Symbols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#predefined-symbols" class="md-nav__link">
+    Predefined Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-defined-symbols" class="md-nav__link">
+    User Defined Symbols
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-do-we-achieve-this" class="md-nav__link">
+    How do we achieve this?
+  </a>
+  
+    <nav class="md-nav" aria-label="How do we achieve this?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parse-module" class="md-nav__link">
+    Parse Module
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-module" class="md-nav__link">
+    Code Module
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hack-assembler" class="md-nav__link">
+    Hack Assembler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbol-table" class="md-nav__link">
+    Symbol Table
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialisation" class="md-nav__link">
+    Initialisation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-pass" class="md-nav__link">
+    First Pass
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-pass" class="md-nav__link">
+    Second Pass
+  </a>
+  
+    <nav class="md-nav" aria-label="Second Pass">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>5.1 Assemblers</h1>
+
+<div><h2 id="background">Background</h2>
+<ul>
+<li>Machine languages can be binary or symbolic</li>
+<li>Writing binary machine code is borderline impossible (or at least wildly inefficient)</li>
+<li>This is why we write machine code symbolically and use an assembler to convert it to binary<ul>
+<li>And later, a compiler to convert high level languages into assembly code</li>
+</ul>
+</li>
+<li>The challenge with doing this:<ul>
+<li>Extract the programs semantics (what it does) from the source program, using the syntax (how it does it) of the source language</li>
+<li>Re express the program's semantics in the target language, using the syntax of the target language</li>
+</ul>
+</li>
+</ul>
+<h2 id="translating-assembly-to-binary">Translating Assembly to Binary</h2>
+<ul>
+<li>Input a stream of assembly instructions and generate an output of binary instructions</li>
+<li>Output is loaded into computer memory and executed</li>
+<li>Assembler must handle instructions and symbols</li>
+</ul>
+<h3 id="handling-symbols">Handling Symbols</h3>
+<ul>
+<li>Needs to read code twice, from start to end to handle jumps<ul>
+<li>In first read, assembler builds a <em>symbol</em> table which contains all the symbols in the code</li>
+<li>In second read, assembler handles variable symbols and generates binary code using the symbol table</li>
+</ul>
+</li>
+</ul>
+<h4 id="predefined-symbols">Predefined Symbols</h4>
+<ul>
+<li>Are initialised before the assembler starts and have no special significance on their own</li>
+<li>Include:<ul>
+<li>Virtual Registers<ul>
+<li><code>R0...R15</code> </li>
+<li>Are automatically predefined to RAM addresses <code>0..15</code></li>
+</ul>
+</li>
+<li>I/O pointers<ul>
+<li><code>SCREEN</code> and <code>KBD</code></li>
+<li>Are automatically predefined to RAM addresses <code>16384</code> and <code>24576</code> respectively</li>
+</ul>
+</li>
+<li>VM control pointers<ul>
+<li><code>SP, LCL, ARG, THIS, THAT</code></li>
+<li>Predefined to refer to RAM addresses <code>0-4</code> (they overlap with virtual registers) </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="user-defined-symbols">User Defined Symbols</h4>
+<ul>
+<li>Label Symbols <code>LOOP, END, etc</code><ul>
+<li>Used to label destinations of jump commands</li>
+<li>Declared by the pseudo command <code>xxx</code>. This directive defines the symbol <code>xxx</code> to refer to the instruction memory location holding the next command in the program </li>
+</ul>
+</li>
+<li>Variable Symbols<ul>
+<li>Any user defined symbol <code>xxx</code> appearing in an assembly program that is note defined elsewhere using the <code>xxx</code> directive is treated as a variable</li>
+<li>The assembler automatically assigns each variable a unique RAM address, starting at RAM address 16</li>
+</ul>
+</li>
+<li>Lowercase for variables and uppercase for labels and predefined symbols!</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>// Predefined symbols:
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>// SP, LCL, ARG, THIS, THAT, R0-R15, SCREEN, KBD
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>// Note: R0-R15 are both registers and memory locations (0-15).
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>@R0               // Refers to register R0, which is also address 0.
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>D=M               // D gets the value from address 0
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>@R1               // Refers to register R1, which is also address 1.
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>M=D+1             // Value at address 1 gets D + 1
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>// User-defined symbols:
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>// Labels:
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>(LOOP_START)      // This is a user-defined label named "LOOP_START".
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>@R2
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>D=M
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>D=D-1
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>@R2
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>M=D
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>@END
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>D;JEQ             // If D is zero, jump to the label END.
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>@LOOP_START
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>0;JMP             // Unconditional jump to LOOP_START
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>(END)             // Another user-defined label named "END".
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>// Variables:
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>@myVar            // A user-defined variable named "myVar". The assembler will allocate a memory location for this.
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>M=123
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>@myVar
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>D=M
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>@SCREEN           // Predefined symbol referring to the base address of the screen memory map.
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>M=D               // Write the value from myVar to the start of the screen (just for demonstration, doesn't achieve much visually).
+</span></code></pre></div>
+<h2 id="how-do-we-achieve-this">How do we achieve this?</h2>
+<ul>
+<li>Call <code>HackAssembler</code> with <code>&lt;progname&gt;.asm</code> in the terminal, to output <code>progname.hack</code> with binary code</li>
+<li>Consists of three modules:<ul>
+<li>Parse module to parse input into instructions and instructions into fields</li>
+<li>Code module for translating fields into binary codes</li>
+<li>Assembler program to drive everything</li>
+</ul>
+</li>
+</ul>
+<h3 id="parse-module">Parse Module</h3>
+<ul>
+<li>Advances through source, skips comments / white space and breaks each symbolic instruction down into it's underlying components</li>
+</ul>
+<p><img alt="figure_wo_caption_6.1" src="../../../assets/Images/figure_wo_caption_6.1.png"></p>
+<h3 id="code-module">Code Module</h3>
+<ul>
+<li>Translates each field created by the parsing module into a 16bit binary code</li>
+</ul>
+<p>![[docs/Images/figure_wo_caption_6.2.png]]</p>
+<h3 id="hack-assembler">Hack Assembler</h3>
+<ul>
+<li>Drives previous two modules</li>
+<li>Basic version assumes no symbolic references<ul>
+<li>All instructions are of type <code>@xxx</code> where <code>x</code> are numbers only</li>
+<li>Input file contains no label instructions</li>
+<li>Get name of file from command line arguments</li>
+<li>Constructs objects for modules</li>
+<li>Creates output file</li>
+<li>For each C instruction:<ol>
+<li>Enter a loop that iterates through each line and process them:<ol>
+<li>Use parse module to break instructions into fields</li>
+<li>Use code module to translate each field</li>
+</ol>
+</li>
+<li>Concatenate translated binary intro a string of 16 binary chars and writes this string as the next line</li>
+</ol>
+</li>
+<li>For each A instruction:<ol>
+<li>Translate into binary representation consisting of 16 binary chars and writes this string as the next line</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="symbol-table">Symbol Table</h3>
+<ul>
+<li>Must resolve symbols into actual addresses using a table</li>
+<li>Achieved using a hash table <code>&lt;key, value&gt;</code> </li>
+</ul>
+<p><img alt="figure_wo_caption_6.3" src="../../../assets/Images/figure_wo_caption_6.3.png"></p>
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li>Using these modules, we can translate assembly into machine code</li>
+<li>Parse instruction into fields</li>
+<li>For each field, generate corresponding bit code</li>
+<li>If instruction contains a symbolic reference, convert symbol into it's numeric value</li>
+<li>Assemble resulting binary into strings of sixteen bits (1 word)</li>
+<li>Write assembled string to output file</li>
+</ul>
+<h3 id="initialisation">Initialisation</h3>
+<ul>
+<li>Create an empty symbol table and initialise it with predefined symbols</li>
+</ul>
+<h3 id="first-pass">First Pass</h3>
+<ul>
+<li>Go through the source code without generating any machine code<ul>
+<li>For each label declaration <code>LABEL</code>, add the pair <code>&lt;LABEL, n&gt;</code> to the symbol table where n is the location of the next instruction in ROM<ul>
+<li>Note, we only do this for labels, not variables</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="second-pass">Second Pass</h3>
+<ul>
+<li>Go through the source code again and process each line:<ul>
+<li>If the line is a C instruction - translate it into 16 bit instruction according to each field <code>DEST=COMP;JMP</code><ul>
+<li>Note, 2 bits after op code are always <code>11</code></li>
+</ul>
+</li>
+<li>If the line is an A instruction <code>@xxx</code>:<ul>
+<li>where <code>xxx</code> is a number, translate <code>xxx</code> into 15 bit binary to get the address</li>
+<li>where <code>xxx</code> is a symbol, look it up in the symbol table and proceed as follows:<ul>
+<li>If found, replace it with its numeric value and complete the instruction</li>
+<li>If not found, then it must represent a new variable:<ul>
+<li>Add the pair <code>&lt;xxx, n&gt;</code> to the symbol table, where n is the next available RAM address (recall, we have predefined symbols up to register 15), and complete the instruction</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_6.1" src="../../../assets/Images/figure_6.1.png"></p>
+<h5 id="example">Example</h5>
+<p><img alt="Pasted image 20230822103522" src="../../../assets/Pasted%20image%2020230822103522.png"></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>@7
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>- A instruction, therefore op code is 0
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>- translate 7 into 15 bit binary, which is 0000000...111
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>D=0
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>- C instruction, therefore op code is 1
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>- computation is =0, therefore a bit is 0 and comp field is 101010
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>- destination is D only, therefore dest field is 010
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>- no jump needed, so jump field is 0000
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>0;JMP
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>- C instruction, therefore op code is 1
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>- computation is =0, therefore a bit is 0 and comp field is 101010
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>- no storing anywhere, therefore dest field is 000
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>- performing unconditional jump, therefore jump field is 111
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>A=D&amp;M;JLT
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>- C instruction, therefore op code is 1
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>- computation is D&amp;M, therefore a bit is 1 and comp field is 000000
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>- storing in A, therefore dest field is 100
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>- performing less than jump, therefore jump field is 100
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>@BOB (assuming BOB=31)
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>- A instruction, therefore op code is 0
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>- Set remaining 15 bits to value of bob (which can be found using the symbol table) = 31
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>AD=!M
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>- C instruction, therefore op code is 1
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>- Computation is !M, therefore comp field is 110001
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>- Storing in AD, therefore dest field is 110
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>- No jump, so jump field is 000
+</span></code></pre></div>
+<p><img alt="Pasted image 20230815121257" src="../../../assets/Pasted%20image%2020230815121257.png"></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>    @KBD
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    D=M
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    @48
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    D=D-A
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    @num
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    M=D
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>(END)
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    @END
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    0;JMP
+</span></code></pre></div>
+<ul>
+<li>Reads the keyboard code at the time of the first <code>D=M</code> command and subtracts 48 from it and puts the result in <code>num</code></li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>    @pix
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    M=1
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    D=M
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    M=M+D
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    M=M+1
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    D=M
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    M=M+D
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    M=M+1
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    D=M
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    @SCREEN
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>    M=D
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>(END)
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    @END
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    0;JMP
+</span></code></pre></div>
+<ul>
+<li>We set the value of <code>SCREEN</code> to be 7, and this in binary is <code>0000...000111</code>, which means it draws the top left most three pixels on the screen black</li>
+</ul></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

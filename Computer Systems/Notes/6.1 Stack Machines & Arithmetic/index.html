@@ -1,0 +1,1835 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../5.1%20Assemblers/">
+      
+      
+        <link rel="next" href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>6.1 Stack Machines & Arithmetic - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-virtual-machine-paradigm" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              6.1 Stack Machines & Arithmetic
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-virtual-machine-paradigm" class="md-nav__link">
+    The Virtual Machine Paradigm
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stack-machine" class="md-nav__link">
+    Stack Machine
+  </a>
+  
+    <nav class="md-nav" aria-label="Stack Machine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#push-pop" class="md-nav__link">
+    Push / Pop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stack-arithmetic" class="md-nav__link">
+    Stack Arithmetic
+  </a>
+  
+    <nav class="md-nav" aria-label="Stack Arithmetic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-addition-and-negation-on-the-stack" class="md-nav__link">
+    Example - Addition and Negation on the Stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-examples" class="md-nav__link">
+    Advanced Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual-memory-segments" class="md-nav__link">
+    Virtual Memory Segments
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#virtual-machine-specification" class="md-nav__link">
+    Virtual Machine Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual Machine Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#push-pop-commands" class="md-nav__link">
+    Push / Pop Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-logical-commands" class="md-nav__link">
+    Arithmetic-Logical Commands
+  </a>
+  
+    <nav class="md-nav" aria-label="Arithmetic-Logical Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vm-mapping-on-the-hack-platform" class="md-nav__link">
+    VM Mapping on the Hack Platform
+  </a>
+  
+    <nav class="md-nav" aria-label="VM Mapping on the Hack Platform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mapping-memory-segments" class="md-nav__link">
+    Mapping Memory Segments
+  </a>
+  
+    <nav class="md-nav" aria-label="Mapping Memory Segments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-examples" class="md-nav__link">
+    VM Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-emulator" class="md-nav__link">
+    VM Emulator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementing-a-vm" class="md-nav__link">
+    Implementing a VM
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementing a VM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    Parser
+  </a>
+  
+    <nav class="md-nav" aria-label="Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codewriter" class="md-nav__link">
+    CodeWriter
+  </a>
+  
+    <nav class="md-nav" aria-label="CodeWriter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-translator" class="md-nav__link">
+    VM Translator
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-virtual-machine-paradigm" class="md-nav__link">
+    The Virtual Machine Paradigm
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stack-machine" class="md-nav__link">
+    Stack Machine
+  </a>
+  
+    <nav class="md-nav" aria-label="Stack Machine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#push-pop" class="md-nav__link">
+    Push / Pop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stack-arithmetic" class="md-nav__link">
+    Stack Arithmetic
+  </a>
+  
+    <nav class="md-nav" aria-label="Stack Arithmetic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-addition-and-negation-on-the-stack" class="md-nav__link">
+    Example - Addition and Negation on the Stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-examples" class="md-nav__link">
+    Advanced Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual-memory-segments" class="md-nav__link">
+    Virtual Memory Segments
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#virtual-machine-specification" class="md-nav__link">
+    Virtual Machine Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual Machine Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#push-pop-commands" class="md-nav__link">
+    Push / Pop Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-logical-commands" class="md-nav__link">
+    Arithmetic-Logical Commands
+  </a>
+  
+    <nav class="md-nav" aria-label="Arithmetic-Logical Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vm-mapping-on-the-hack-platform" class="md-nav__link">
+    VM Mapping on the Hack Platform
+  </a>
+  
+    <nav class="md-nav" aria-label="VM Mapping on the Hack Platform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mapping-memory-segments" class="md-nav__link">
+    Mapping Memory Segments
+  </a>
+  
+    <nav class="md-nav" aria-label="Mapping Memory Segments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-examples" class="md-nav__link">
+    VM Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-emulator" class="md-nav__link">
+    VM Emulator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementing-a-vm" class="md-nav__link">
+    Implementing a VM
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementing a VM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    Parser
+  </a>
+  
+    <nav class="md-nav" aria-label="Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codewriter" class="md-nav__link">
+    CodeWriter
+  </a>
+  
+    <nav class="md-nav" aria-label="CodeWriter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vm-translator" class="md-nav__link">
+    VM Translator
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>6.1 Stack Machines & Arithmetic</h1>
+
+<div><p><img alt="figure_II.3" src="../../../assets/Images/figure_II.3.png"></p>
+<ul>
+<li>The ultimate goal is to be able to write high level code in Jack, use a compiler to compile it into bytecode, which is then translated into assembly code and then finally assembled into machine code, to be executed by the hardware.</li>
+<li>This two tier compilation model allows for cross platform compatibility, because we run the bytecode on a virtual machine which can then be translated according to the machine it's running on</li>
+</ul>
+<p><img alt="Pasted image 20230829105634" src="../../../assets/Pasted%20image%2020230829105634.png"></p>
+<h2 id="the-virtual-machine-paradigm">The Virtual Machine Paradigm</h2>
+<ul>
+<li>High level code must be translated into machine code before it can run<ul>
+<li>We break this down into two stages</li>
+<li>High level code is parsed and translated into intermediate steps</li>
+<li>The intermediate steps are translated further into low level machine code of the target hardware</li>
+<li>This allows us to keep a single high level compiler for a language, and implement virtual machines for different hardware sets to translate intermediate code</li>
+</ul>
+</li>
+<li>This first program, called the compiler, translates high level code into intermediate VM commands</li>
+<li>The second program, called the VM translator, translates the VM commands further into the machine instructions of the target hardware platform </li>
+</ul>
+<p><img alt="figure_7.1" src="../../../assets/Images/figure_7.1.png"></p>
+<ul>
+<li>The benefit with this model, is it allows developers to write code once, and execute it anywhere, even on new devices that don't exist yet</li>
+<li>The cost with this is reduced efficiency - verbose machine code as a result of multiple compilations</li>
+</ul>
+<h2 id="stack-machine">Stack Machine</h2>
+<ul>
+<li>Effective VM languages strike a balance between high and low level syntax<ul>
+<li>Should have reasonable expressive power - arithmetic logical commands, push / pop commands, function commands</li>
+<li>Commands should also be low such that the machine code is tight and efficient</li>
+</ul>
+</li>
+<li>To achieve this conflicting result, we use a <em>stack machine</em></li>
+</ul>
+<h3 id="push-pop">Push / Pop</h3>
+<ul>
+<li>Centrepiece of the stack machine is the <em>[[docs/Computer Science/Algorithms and Data Structures/Notes/8.1 Stacks|Stack]]</em>… duh<ul>
+<li>A sequential storage space that grows and shrinks as needed</li>
+<li>Supports two commands - <code>push, pop</code></li>
+</ul>
+</li>
+<li>Push:<ul>
+<li>Adds a value to the top of the stack (like adding a plate to a stack of plates)</li>
+</ul>
+</li>
+<li>Pop:<ul>
+<li>Removes the stack's top value; the value that was just before it becomes the top of the stack</li>
+</ul>
+</li>
+<li>We can say that stacks are <em>Last In, First Out</em><ul>
+<li>The popped value is always the last one that was pushed into the stack</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_7.2" src="../../../assets/Images/figure_7.2.png"></p>
+<ul>
+<li>We can see that memory access is different in RAM vs the Stack<ul>
+<li>The stack is only accessible from the top, whereas any RAM address can be accessed from anywhere</li>
+<li>Reading a value from the stack is lossy - Only the top value can be read, and only by popping it (though some stacks do allow you to read without removal, called <code>peek</code>). Reading from RAM has no affect on the state of memory</li>
+<li>Writing to the stack entails adding a value to the top without updating other values, whereas writing in RAM is lossy by overriding a location's previous state</li>
+</ul>
+</li>
+</ul>
+<h3 id="stack-arithmetic">Stack Arithmetic</h3>
+<ul>
+<li>Consider the operation <code>x op y</code>, where <code>op</code> is just some operator applied to x and y - <code>add, subtract, etc</code></li>
+<li>In a stack machine, these operations are carried out as follows:<ul>
+<li>Operands <code>x and y</code> are popped off the stack</li>
+<li><code>x op y</code> is computed</li>
+<li>Result of operation is pushed onto the stack</li>
+<li>Same can be done with unary operations <code>op x</code> for single values</li>
+</ul>
+</li>
+</ul>
+<h5 id="example-addition-and-negation-on-the-stack">Example - Addition and Negation on the Stack</h5>
+<p><img alt="figure_wo_caption_7.1" src="../../../assets/Images/figure_wo_caption_7.1.png"></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>push 3
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>push 7
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>add
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>neg
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>pop x
+</span></code></pre></div>
+<h5 id="advanced-examples">Advanced Examples</h5>
+<p><img alt="figure_7.3a" src="../../../assets/Images/figure_7.3a.png"></p>
+<p><img alt="figure_7.3a" src="../../../assets/Images/figure_7.3b.png"></p>
+<p><img alt="Pasted image 20230829111001" src="../../../assets/Pasted%20image%2020230829111001.png"></p>
+<ul>
+<li>Looking at these, we can see that any high level complicated expression can be reduced down into a single value using a stack machine</li>
+</ul>
+<h3 id="virtual-memory-segments">Virtual Memory Segments</h3>
+<ul>
+<li>Don't use symbolic variables like <code>x, y, sum, etc</code> but variables are represented as entries in VM segments that have names like <code>static, this, local, etc</code><ul>
+<li>First, second third static variables become <code>static 0, static 1, etc</code></li>
+<li>Something like <code>let x=y</code> becomes <code>push this 3, pop local 1</code></li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20230822130944" src="../../../assets/Pasted%20image%2020230822130944.png"></p>
+<ul>
+<li><em>Rest of segments covered later</em></li>
+</ul>
+<h2 id="virtual-machine-specification">Virtual Machine Specification</h2>
+<ul>
+<li>Stack based, operations take their operands from, and store their results on the stack</li>
+<li>1 data type - 16 bit signed integer</li>
+<li>A VM program is a sequence of commands:<ul>
+<li><code>push / pop</code><ul>
+<li>Transfer data between the stack and memory segments</li>
+</ul>
+</li>
+<li><code>Arithmetic-Logical</code><ul>
+<li>Perform arithmetic and logical operations</li>
+</ul>
+</li>
+<li><code>Branching</code> <ul>
+<li>Facilitate conditional and unconditional branching operations</li>
+</ul>
+</li>
+<li><code>Function</code><ul>
+<li>Facilitate function call and return operations</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="push-pop-commands">Push / Pop Commands</h3>
+<p><img alt="Pasted image 20230822131537" src="../../../assets/Pasted%20image%2020230822131537.png"></p>
+<h3 id="arithmetic-logical-commands">Arithmetic-Logical Commands</h3>
+<ul>
+<li>Arithmetic commands: <code>add</code>, <code>sub</code>, <code>neg</code></li>
+<li>Comparison commands: <code>eq</code>, <code>gt</code>, <code>lt</code></li>
+<li>Logical commands: <code>and</code>, <code>or</code>, <code>not</code></li>
+<li>All require two operands<ul>
+<li>Pop two values off the stack, computes the stated function with values, pushes result back onto the stack</li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_7.5" src="../../../assets/Images/figure_7.5.png"></p>
+<h5 id="examples">Examples</h5>
+<p><img alt="Pasted image 20230829111427" src="../../../assets/Pasted%20image%2020230829111427.png"></p>
+<p><img alt="Pasted image 20230829111539" src="../../../assets/Pasted%20image%2020230829111539.png"></p>
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li>Use a VM translator to convert VM commands into machine language<ul>
+<li>Using a stack and virtual memory segments</li>
+<li>Translate each VM command into a sequence of low level instructions</li>
+</ul>
+</li>
+<li>Von Neumann example<ul>
+<li>Represent VM stack using a designated memory block in the host RAM</li>
+<li>Lower end of the block will be a fixed base address</li>
+<li>Higher end will change as the stack grows and shrinks</li>
+<li>We can manage the stack by keeping track of a stack pointer, which holds the address of the RAM entry after the top most value of the stack<ul>
+<li>This value will initially be <code>stackBase</code> which is the bottom of the stack</li>
+</ul>
+</li>
+<li><code>push x</code> can be implemented via <code>RAM[SP] = x</code>, followed by <code>SP++</code> to increment the stack pointer</li>
+<li><code>pop x</code> can be implemented via <code>SP--</code>, followed by <code>x = RAM[SP]</code></li>
+</ul>
+</li>
+<li>Hack Example<ul>
+<li>Set stack base at address 256 in Hack RAM<ul>
+<li><code>SP=256</code> via <code>@256, D=A. @SP, M=D</code></li>
+</ul>
+</li>
+<li>The VM translator can then handle each push and pop command by generating assembly that realises <code>RAM[SP++] = x</code> or <code>x = RAM[SP--]</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="vm-mapping-on-the-hack-platform">VM Mapping on the Hack Platform</h3>
+<ul>
+<li>VM Program is a sequence of commands stored in a text file named <code>FileName.vm</code> <ul>
+<li>First letter must be uppercase</li>
+<li>Each line is a separate VM command, to be translated into one or more instructions in assembly code</li>
+</ul>
+</li>
+<li>VM abstraction has only data type that can be expressed as:<ul>
+<li>Two's complement 16 bit value - i.e. A signed integer</li>
+<li>VM Boolean true / false are represented as <code>-1 and 0</code> respectively</li>
+<li>Pointer (memory address)</li>
+</ul>
+</li>
+<li>Hack RAM consists of 32K 16bit words</li>
+</ul>
+<p><img alt="Pasted image 20230822135331" src="../../../assets/Pasted%20image%2020230822135331.png"></p>
+<ul>
+<li>Recall our predefined symbols used in assemblers:</li>
+</ul>
+<p><img alt="Pasted image 20230822135445" src="../../../assets/Pasted%20image%2020230822135445.png"></p>
+<ul>
+<li>For now, assume these have been already initialised to suitable addresses in RAM</li>
+<li>Their addresses aren't important to the VM anyway</li>
+<li>
+<p>Suppose we want to storage the D register on the stack: <code>RAM[SP++] = D</code></p>
+<ul>
+<li>This can be realised in assembly using: <code>@SP, A=M, M=D, M=M+1</code></li>
+</ul>
+</li>
+<li>
+<p><code>@SP</code>: This is loading the address of the <code>SP</code> register.</p>
+</li>
+<li><code>A=M</code>: Once the address in <code>SP</code> has been loaded, this sets the <code>A</code> register to whatever value is in memory at the address held in <code>SP</code>. Essentially, <code>A</code> now holds the address of the top of the stack.</li>
+<li><code>M=D</code>: This assigns the value in the <code>D</code> register to the RAM location pointed to by the <code>A</code> register. Given the previous step, this effectively stores the value in <code>D</code> at the top of the stack.</li>
+<li><code>M=M+1</code>: This increments the value at the RAM location pointed to by the <code>A</code> register.</li>
+</ul>
+<h4 id="mapping-memory-segments">Mapping Memory Segments</h4>
+<ul>
+<li>Base address of segments <code>local, argument, this, that</code> are stored in registers <code>LCL, ARG, THIS, THAT</code> respectively<ul>
+<li>Any access to the <code>nth</code> value of a virtual segment <code>push / pop segmentName n</code> is translated into assembly that accesses address <code>base+n</code>, where <code>base</code> is a pointer to <code>LCL, ARG, THIS, or THAT</code></li>
+</ul>
+</li>
+<li>Pointer segment contains two values, mapped to registers 3 and 4 <code>THIS and THAT</code><ul>
+<li>Access to <code>pointer 0 or 1</code> is done by accessing the <code>THIS or THAT</code> pointer</li>
+<li><code>pop pointer 0</code> sets <code>THIS</code> to the popped value</li>
+<li><code>push pointer 1</code> should push onto the stack the current value of <code>THAT</code></li>
+</ul>
+</li>
+<li>Temp - 8 word segment mapped to registers 5-12<ul>
+<li>Any access to <code>temp i</code> where <code>i</code> varies from 0 - 7 is translated into assembly code that accesses RAM at locations <code>5 + i</code></li>
+</ul>
+</li>
+<li>Constant - doesn't occupy any ram space, just supplies the constant <code>i</code><ul>
+<li><code>push constant 17</code> will translate in assembly to pushing the value of 17 onto the stack</li>
+</ul>
+</li>
+<li>Static - mapped to addresses 16-255 (maximum of 240 static variables)<ul>
+<li>Each reference to <code>static i</code> are the variables created in VM code</li>
+<li><code>push constant 100, push constant 200, pop static 5, pop static 2</code> causes <code>static 5 and static 2</code> to be mapped on RAM addresses 16 and 17 respectively</li>
+</ul>
+</li>
+<li>Stack begins at address 256</li>
+</ul>
+<p><img alt="Pasted image 20230904045619" src="../../../assets/Pasted%20image%2020230904045619.png"></p>
+<p><img alt="Pasted image 20230904045636" src="../../../assets/Pasted%20image%2020230904045636.png"></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[RAM of Hack Computer]
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>+---------------------+  &lt;-- Highest memory address
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>|                     |
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>|     Unused/Heap     |
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>|                     |
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>+---------------------+
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>|    Stack Frame #n   |
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>|      (Local vars,   |
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>|       Return addr,  |
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>|       Args, etc.)   |
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>+---------------------+
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>|    Stack Frame #n-1 |
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>|      (Local vars,   |
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>|       Return addr,  |
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>|       Args, etc.)   |
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>+---------------------+
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>|          ...        |
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>+---------------------+
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>|    Stack Frame #2   |
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>|      (Local vars,   |
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>|       Return addr,  |
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>|       Args, etc.)   |
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>+---------------------+
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>|    Stack Frame #1   |
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>|      (Local vars,   |
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>|       Return addr,  |
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>|       Args, etc.)   |
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>+---------------------+  &lt;-- SP (Stack Pointer)
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>|                     |
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>|      STACK AREA     |
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>|                     |
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>+---------------------+
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>|     Static vars     |
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>|   of other classes  |
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>|          ...        |
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>+---------------------+  &lt;-- Static vars of current class (address 16)
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>|      General-Purpose|
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>|     Registers (3)   |
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>|    (13, 14, 15)     |
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>+---------------------+
+</span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>|       Temp (8)      |
+</span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>|      (5 to 12)      |
+</span><span id="__span-1-44"><a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>+---------------------+
+</span><span id="__span-1-45"><a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>|      Pointer (2)    |
+</span><span id="__span-1-46"><a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>|     THIS and THAT   |
+</span><span id="__span-1-47"><a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>|      (3 and 4)      |
+</span><span id="__span-1-48"><a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>+---------------------+
+</span><span id="__span-1-49"><a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>|         THAT        |  &lt;-- (address 4)
+</span><span id="__span-1-50"><a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>+---------------------+
+</span><span id="__span-1-51"><a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>|         THIS        |  &lt;-- (address 3)
+</span><span id="__span-1-52"><a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>+---------------------+
+</span><span id="__span-1-53"><a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>|         ARG         |  &lt;-- (address 2)
+</span><span id="__span-1-54"><a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>+---------------------+
+</span><span id="__span-1-55"><a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>|         LCL         |  &lt;-- (address 1)
+</span><span id="__span-1-56"><a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>+---------------------+
+</span><span id="__span-1-57"><a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>|          SP         |  &lt;-- (address 0)
+</span><span id="__span-1-58"><a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>+---------------------+  &lt;-- Lowest memory address
+</span></code></pre></div>
+<p>Explanation:</p>
+<ul>
+<li>
+<p><strong>SP (Stack Pointer)</strong>: Points to the top of the stack. As functions are called or values pushed, it moves upwards. On return or pop operations, it moves downwards.</p>
+</li>
+<li>
+<p><strong>LCL and ARG</strong>: Base pointers for the <code>local</code> and <code>argument</code> segments of the currently executing function.</p>
+</li>
+<li>
+<p><strong>THIS and THAT</strong>: General purpose pointers, often used for the current object and array operations.</p>
+</li>
+<li>
+<p><strong>Temp Segment</strong>: Fixed space for temporary storage.</p>
+</li>
+<li>
+<p><strong>General-Purpose Registers</strong>: Additional storage, not strictly defined by the VM, but available for use.</p>
+</li>
+<li>
+<p><strong>Static Segment</strong>: Holds static variables, which retain their values across function calls within the same class. Each class has its unique space in this segment.</p>
+</li>
+<li>
+<p><strong>Stack Area</strong>: Where the magic happens! Function calls create a new frame containing local variables, return addresses, and function arguments. Each function has its frame, and they are pushed onto and popped off the stack in a LIFO (Last In, First Out) manner.</p>
+</li>
+</ul>
+<h5 id="examples_1">Examples</h5>
+<ol>
+<li>``
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>push constant 1  // push the value of 1 onto the stack
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>@sp              // get address of stack pointer
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>AM = M+1         
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>// Increment the SP to make room for the new value. The SP always points to the next available address in the stack.
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>A = A-1          // After incrementing, we go back to the address where we actually want to store our new value.
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>M = 1            // Set the value of this address to 1 (pushing the constant onto the stack).
+</span></code></pre></div>
+<p>When you see the combined operation <code>AM</code>, the order of operations is:</p>
+<ol>
+<li>The <code>A</code> register is set to the value of <code>M+1</code>.</li>
+<li>The memory location pointed to by the <code>A</code> register (which is now <code>M+1</code>) gets the value <code>M+1</code>.</li>
+</ol>
+<p>Let's break it down for clarity:</p>
+<ol>
+<li><code>A=M+1</code>: The address register <code>A</code> is set to whatever value <code>M</code> currently holds plus one.</li>
+<li>
+<p><code>M=M+1</code>: The memory location at the address stored in the <code>A</code> register (which has just been set to <code>M+1</code>) is then updated to hold the value <code>M+1</code>.</p>
+</li>
+<li>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pop static 7 (in a VM file named Bob.vm) // pop the top most value in the stack and store it in static 7
+</span></code></pre></div>
+</li>
+</ol>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="err">@</span><span class="nf">sp</span><span class="w">             </span><span class="c1">// Get address of stack pointer</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">AM</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">M-1</span><span class="w">        </span><span class="c1">// Decrement the stack pointer by 1 to point to the top-most value on the stack (since we are popping it off)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nf">D</span><span class="err">=</span><span class="no">M</span><span class="w">             </span><span class="c1">// Store the value from the top of the stack inside the D register</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="err">@</span><span class="nf">Bob.7</span><span class="w">          </span><span class="c1">// Address the 7th static variable in the Bob.vm file</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nf">M</span><span class="err">=</span><span class="no">D</span><span class="w">             </span><span class="c1">// Set the value of static 7 (Bob.7) to be the value previously stored in the D register</span>
+</span></code></pre></div>
+<p><img alt="Pasted image 20230904052410" src="../../../assets/Pasted%20image%2020230904052410.png"></p>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>push constant 5
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>@5              // A=5: load the constant 5 into the A register
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>D=A             // D=5: store the constant 5 in the D register
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>@SP             // get address of the stack pointer
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>A=M             // go to the top of the stack
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>M=D             // place the constant 5 on the top of the stack
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>@SP             // get address of the stack pointer again
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>M=M+1           // increment the stack pointer
+</span></code></pre></div>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>add
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>@SP             // get address of the stack pointer
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>AM=M-1          // decrement the stack pointer and go to the top value
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>D=M             // pop the top value into D register
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>A=A-1           // go to the next value on the stack
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>M=D+M           // add the value in D to the value at the top of the stack and store result
+</span></code></pre></div>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>pop local 2
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>@SP             // get address of the stack pointer
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>AM=M-1          // decrement the stack pointer and go to the top value
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>D=M             // pop the top value into D register
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>@LCL            // get base address of the local segment
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>A=M             // go to the base address of the local segment
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>A=A+1           // increment to get to index 1
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>A=A+1           // increment again to get to index 2
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>M=D             // store the popped value in local 2
+</span></code></pre></div>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>eq
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>@SP             // Get address of the stack pointer
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>AM=M-1          // Decrement the stack pointer and go to the first value
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>D=M             // Pop the top value into D register
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>A=A-1           // Go to the second value on the stack
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>D=M-D           // Subtract: Set D = second value - first value
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>// We will use branching to determine if D is 0
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>@EQUAL          // If D (result of subtraction) is 0, jump to EQUAL label
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>D;JEQ
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>// Code for "not equal" scenario
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>@SP             // Get address of the stack pointer
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>A=M-1           // Point to the top of the stack
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>M=0             // Set the top of the stack to false (0)
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>@CONTINUE       // Jump to the CONTINUE label to continue the program
+</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>0;JMP
+</span><span id="__span-13-17"><a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>
+</span><span id="__span-13-18"><a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>(EQUAL)         // EQUAL label
+</span><span id="__span-13-19"><a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>@SP             // Get address of the stack pointer
+</span><span id="__span-13-20"><a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>A=M-1           // Point to the top of the stack
+</span><span id="__span-13-21"><a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>M=-1            // Set the top of the stack to true (-1)
+</span><span id="__span-13-22"><a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>
+</span><span id="__span-13-23"><a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>(CONTINUE)      // CONTINUE label (for continuing the program)
+</span></code></pre></div>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>not
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>@SP
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>A=M-1
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>M=!M
+</span></code></pre></div>
+<h5 id="vm-examples">VM Examples</h5>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>VM ((a+b)+c), a, b, c are local 4, 5, 6
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>push local 4
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>push local 5
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>add
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>push local 6
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>add
+</span></code></pre></div>
+<ul>
+<li>Static table</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>x</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>y</td>
+<td>7</td>
+</tr>
+<tr>
+<td>2</td>
+<td>z</td>
+<td>-18</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>1+1
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>push constant 1
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>push constant 1
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>add
+</span></code></pre></div>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>-(x+2)
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>push static 0
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>push constant 2
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>add
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>neg
+</span></code></pre></div>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>z=5+(x-y)
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>push static 0
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>push static 1
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>sub
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>push constant 5
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>add
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>pop static 2
+</span></code></pre></div>
+<ol>
+<li><div class="language-text highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>x&lt;5
+</span></code></pre></div></li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>push static 0
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>push constant 5
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>lt
+</span></code></pre></div>
+<h3 id="vm-emulator">VM Emulator</h3>
+<ul>
+<li>A simple to way to implement a VM is to write a high level program representing a stack + memory segments and implement the BM commands using high level programming</li>
+<li>Stack can be represented using a large array and push, pop can be realised literally using high level statements like <code>RAM[SP++] = D</code></li>
+<li>Combined with a GUI, this can be a good way to visualise how the stack works</li>
+</ul>
+<p><img alt="figure_7.6" src="../../../assets/Images/figure_7.6.png"></p>
+<h3 id="implementing-a-vm">Implementing a VM</h3>
+<ul>
+<li>Uses three modules<ol>
+<li>Parser - Make sense out of each VM command - understand what the command seeks to do</li>
+<li>CodeWriter - translate the understood VM command into assembly instruction</li>
+<li>Main program called <code>VMTranslator</code> - Drives the translation process</li>
+</ol>
+</li>
+</ul>
+<h4 id="parser">Parser</h4>
+<ul>
+<li>Handles the parsing of a single <code>.vm</code> file</li>
+<li>Provides services for reading a VM command, unpacking the command into various components, providing convenient access to components</li>
+<li>Ignores all white space and comments</li>
+</ul>
+<p><img alt="figure_wo_caption_7.4" src="../../../assets/Images/figure_wo_caption_7.4.png"></p>
+<h5 id="example">Example</h5>
+<ul>
+<li>If the current command is <code>push local 2</code>, then calling <code>arg1() and arg2()</code> would return, respectively <code>local</code> and <code>2</code></li>
+<li>If the current command is <code>add</code>, then calling <code>arg1() and arg2()</code>  would return <code>add</code> and <code>arg2()</code> would not be called</li>
+</ul>
+<h4 id="codewriter">CodeWriter</h4>
+<ul>
+<li>Translates a parsed VM command into assembly</li>
+</ul>
+<p><img alt="figure_wo_caption_7.5" src="../../../assets/Images/figure_wo_caption_7.5.png"></p>
+<h5 id="example_1">Example</h5>
+<ul>
+<li>Calling <code>writePushPop (C_PUSH, "local", 2</code>) would result in generating assembly instructions that implement the VM command <code>push local 2</code></li>
+<li>Calling <code>writeArithmetic("add")</code> would result in generating assembly instructions that pop the two topmost elements from the stack, add them and push the result onto the stack</li>
+</ul>
+<h4 id="vm-translator">VM Translator</h4>
+<ul>
+<li>Translator accepts a single command line argument</li>
+</ul>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>$<span class="w"> </span>&gt;<span class="w"> </span>VMTranslator<span class="w"> </span><span class="nb">source</span>
+</span></code></pre></div>
+<ul>
+<li>Where <code>source</code> is a file name of form <code>ProgName.vm</code></li>
+<li>Drives the Parser and CodeWriter by looping through each line in the file and outputting assembly code</li>
+</ul></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

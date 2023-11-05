@@ -1,0 +1,1354 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../8.2%20Jack%20Examples/">
+      
+      
+        <link rel="next" href="../../Past%20Papers/Links/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>9.1 Compiler Syntax - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#background" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              9.1 Compiler Syntax
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.1%20Machine%20Language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+    <nav class="md-nav" aria-label="Background">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tokenising" class="md-nav__link">
+    Tokenising
+  </a>
+  
+    <nav class="md-nav" aria-label="Tokenising">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#grammar" class="md-nav__link">
+    Grammar
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parsing" class="md-nav__link">
+    Parsing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    Parser
+  </a>
+  
+    <nav class="md-nav" aria-label="Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-parsing-while" class="md-nav__link">
+    Example - Parsing while
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jack-specification" class="md-nav__link">
+    Jack Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Jack Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#grammar_1" class="md-nav__link">
+    Grammar
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syntax-analyser" class="md-nav__link">
+    Syntax Analyser
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jack-implementation" class="md-nav__link">
+    Jack Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Jack Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jacktokenizer" class="md-nav__link">
+    JackTokenizer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compilationengine" class="md-nav__link">
+    CompilationEngine
+  </a>
+  
+    <nav class="md-nav" aria-label="CompilationEngine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token-lookahead" class="md-nav__link">
+    Token Lookahead
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jackanalyzer" class="md-nav__link">
+    JackAnalyzer
+  </a>
+  
+    <nav class="md-nav" aria-label="JackAnalyzer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+    <nav class="md-nav" aria-label="Background">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tokenising" class="md-nav__link">
+    Tokenising
+  </a>
+  
+    <nav class="md-nav" aria-label="Tokenising">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#grammar" class="md-nav__link">
+    Grammar
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parsing" class="md-nav__link">
+    Parsing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    Parser
+  </a>
+  
+    <nav class="md-nav" aria-label="Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-parsing-while" class="md-nav__link">
+    Example - Parsing while
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jack-specification" class="md-nav__link">
+    Jack Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Jack Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#grammar_1" class="md-nav__link">
+    Grammar
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syntax-analyser" class="md-nav__link">
+    Syntax Analyser
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jack-implementation" class="md-nav__link">
+    Jack Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="Jack Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jacktokenizer" class="md-nav__link">
+    JackTokenizer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compilationengine" class="md-nav__link">
+    CompilationEngine
+  </a>
+  
+    <nav class="md-nav" aria-label="CompilationEngine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token-lookahead" class="md-nav__link">
+    Token Lookahead
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jackanalyzer" class="md-nav__link">
+    JackAnalyzer
+  </a>
+  
+    <nav class="md-nav" aria-label="JackAnalyzer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>9.1 Compiler Syntax</h1>
+
+<div><blockquote>
+<p>A compiler is a program that translates programs from a source language <em>Jack</em> into a target language <em>Hack VM</em></p>
+</blockquote>
+<ul>
+<li>We parse code syntax to understand it’s semantics and reveal intent</li>
+</ul>
+<h2 id="background">Background</h2>
+<ul>
+<li>Compilation consists of two stages:<ol>
+<li>Syntax Analysis - understanding the semantics implied by the source code (divided into two more stages)<ol>
+<li>Tokenising - grouping input characters into a stream of tokens</li>
+<li>Parsing - Matching token stream with language grammar</li>
+</ol>
+</li>
+<li>Code Generation - reconstructing the semantics in VM code</li>
+</ol>
+</li>
+</ul>
+<p><img alt="Pasted image 20231002234954" src="../../../assets/Pasted%20image%2020231002234954.png"></p>
+<h3 id="tokenising">Tokenising</h3>
+<ul>
+<li>Jack has a set of <em>tokens</em> or words that form the <em>lexicon</em><ul>
+<li>Keywords - <code>class, while, for, etc</code></li>
+<li>Symbols - <code>+, &lt;, etc</code></li>
+<li>Integer Constants - <code>17, 214, etc</code></li>
+<li>String Constants - <code>”FAQ”, “NAME”, etc</code></li>
+<li>Identifiers -  textual labels for naming variables, classes, functions</li>
+</ul>
+</li>
+<li>These tokens are treated as the simplest elements in a program and are fed 1 by 1 into the compiler for code generation</li>
+<li>Essentially, we turn a stream of characters into a stream of tokens</li>
+</ul>
+<p><img alt="Pasted image 20231003002309" src="../../../assets/Pasted%20image%2020231003002309.png"></p>
+<ul>
+<li>There are specific XML entities for some special characters:</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&lt;  :  &amp;lt;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&gt;  :  &amp;gt;
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>'  :  &amp;apost;
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>"  :  &amp;quot;
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&amp;  :  &amp;amp;
+</span></code></pre></div>
+<h4 id="grammar">Grammar</h4>
+<ul>
+<li>A set of rules that describe legal examples of a language, each consisting of a left and a right side<ul>
+<li>Left side specifies the rule’s name and is not part of the language itself</li>
+<li>Right side describes the pattern of tokens that the rule specifies<ul>
+<li>This pattern goes from left to right and consists of <code>terminals, non terminals and qualifiers</code><ul>
+<li>Terminals are tokens</li>
+<li>Nonterminals are other rules</li>
+<li>Qualifiers are represented by <code>|, *, ?, (, )</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Pasted image 20231003003608" src="../../../assets/Pasted%20image%2020231003003608.png"></p>
+<ul>
+<li><code>|</code> means or</li>
+<li><code>*</code> denotes something happens multiple times</li>
+<li><code>?</code> means 0 or 1 times</li>
+</ul>
+<h4 id="parsing">Parsing</h4>
+<ul>
+<li>Grammar is recursive. Rules can contain more rules, the result of which affects the rule before it.</li>
+<li>This correspondence can be represented with a data structure called a <em>parse tree</em></li>
+</ul>
+<p><img alt="Pasted image 20231003014724" src="../../../assets/Pasted%20image%2020231003014724.png"></p>
+<ul>
+<li>Parse output (this tree) is denoted in XML, kinda like HTML markup</li>
+</ul>
+<p><img alt="Pasted image 20231003014855" src="../../../assets/Pasted%20image%2020231003014855.png"></p>
+<h4 id="parser">Parser</h4>
+<ul>
+<li>Accepts a stream of tokens as input and outputs a parse tree (XML)</li>
+<li>Algorithms used to create parse trees - <em>recursive descent parsing</em><ul>
+<li>For each rule, there exists routines to compile those tokens into a parse tree</li>
+</ul>
+</li>
+<li>Each <code>compilexxx</code> routine should get from the input, and handle, all the tokens that make up xxx, advance the tokenizer exactly beyond these tokens, and output the parse tree of xxx.</li>
+</ul>
+<h5 id="example-parsing-while">Example - Parsing <code>while</code></h5>
+<ul>
+<li><code>while ( expression ) { statement* )</code></li>
+</ul>
+<p><img alt="Pasted image 20231003015251" src="../../../assets/Pasted%20image%2020231003015251.png"></p>
+<h2 id="jack-specification">Jack Specification</h2>
+<h3 id="grammar_1">Grammar</h3>
+<p><img alt="figure_10.5" src="../../../assets/figure_10.5.png"></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>'xxx' : represents language tokens that appear verbatim
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>xxx   : represents names of terminal and nonterminal elements
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>( )   : used for grouping
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>x | y : either x or y
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>x y   : x is followed by y
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>x ?   : x appears 0 or 1 times
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>x *   : x appears 0 or more times
+</span></code></pre></div>
+<h3 id="syntax-analyser">Syntax Analyser</h3>
+<ul>
+<li>Performs tokenising and parsing</li>
+<li>Accepts a single command line arg</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>JackAnalyzer<span class="w"> </span>xxx.jack
+</span></code></pre></div>
+<h2 id="jack-implementation">Jack Implementation</h2>
+<ul>
+<li>Based on three modules<ul>
+<li><code>JackAnalyzer</code>: main program that sets up and invokes the other modules</li>
+<li><code>JackTokenizer</code>: tokenizer</li>
+<li><code>CompilationEngine</code>: recursive top down parser</li>
+</ul>
+</li>
+</ul>
+<h3 id="jacktokenizer">JackTokenizer</h3>
+<ul>
+<li>Ignores comments / whitespace</li>
+<li>Allows parser to access input stream one token at a time</li>
+<li>Parses and provides the <em>type</em> of each token</li>
+</ul>
+<p><img alt="figure_wo_caption_10.7" src="../../../assets/Images/figure_wo_caption_10.7.png"></p>
+<h3 id="compilationengine">CompilationEngine</h3>
+<ul>
+<li>Emits a structured representation of the input source code wrapped in XML tags</li>
+<li>Once code generation has been introduced, instead of XML tags it will become VM code</li>
+<li>Gets input from the <code>JackTokenizer</code> and emits output to an XML file<ul>
+<li>Output is generated by a series of <code>compilexxx</code> routines, each of which are designed to handle of specific language constructs <code>xxx</code></li>
+<li><code>compilexxx</code> is only called if the current token is <code>xxx</code></li>
+</ul>
+</li>
+<li>Some grammar rules don't have a corresponding compilation model<ul>
+<li><code>type, className, subroutineName, varName, statement, subroutineCall</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="token-lookahead">Token Lookahead</h4>
+<ul>
+<li>For each <code>compilexxx</code> behavior, the maximum recursive depth is 1, meaning the current token can indicate which routine to call next.</li>
+<li>
+<p><strong>Exception</strong>: Parsing a "term" in an expression or a subroutine call. Here, only the current token is often insufficient.</p>
+</li>
+<li>
+<p><strong><code>y</code></strong>:</p>
+<ul>
+<li>Recognize "y" as an identifier.</li>
+<li>Peek at next token (it's "+").</li>
+<li>Determine "y" is a standalone variable.</li>
+</ul>
+</li>
+<li>
+<p><code>arr[5]</code>:</p>
+<ul>
+<li>Recognize "arr" as an identifier.</li>
+<li>Peek at next token (it's <code>[</code>).</li>
+<li>Determine <code>arr[5]</code> is an array element.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>p.get(row)</code></strong>:</p>
+<ul>
+<li>Recognize "p" as an identifier.</li>
+<li>Peek at next token (it's ".").</li>
+<li>Parse further to determine "<code>p.get(row)</code>" is a method call on the object "p"</li>
+</ul>
+</li>
+<li>
+<p><strong><code>count()</code></strong>:</p>
+<ul>
+<li>Recognize "count" as an identifier.</li>
+<li>Peek at next token (it's "(").</li>
+<li>Determine "count()" is a method call.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>Math.sqrt(dist)</code></strong>:</p>
+<ul>
+<li>Recognize "Math" as an identifier.</li>
+<li>Peek at next token (it's ".").</li>
+<li>Parse further to determine "<code>Math.sqrt(dist)</code>" is a method call.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>2</code></strong>:</p>
+<ul>
+<li>Recognize "2" as a constant. No ambiguity, so no lookahead needed.</li>
+</ul>
+</li>
+<li>
+<p>By peeping one token ahead, the parser can easily determine the nature and function of the current token within the expression.</p>
+</li>
+</ul>
+<p><img alt="figure_wo_caption_10.8" src="../../../assets/Images/figure_wo_caption_10.8.png"></p>
+<h3 id="jackanalyzer">JackAnalyzer</h3>
+<ul>
+<li>Main program that drives the syntax analysis process<ul>
+<li>Calls <code>JackTokenizer</code> and <code>CompilationEngine</code></li>
+</ul>
+</li>
+<li>For each <code>xxx.jack</code> file:<ol>
+<li>Create a <code>JackTokenizer</code> from the <code>xxx.jack</code> input file</li>
+<li>Create an output file <code>xxx.xml</code></li>
+<li>Uses the <code>JackTokenizer</code> and <code>CompilationEngine</code> to parse the input and write the parsed code to the output</li>
+</ol>
+</li>
+</ul>
+<h5 id="examples">Examples</h5>
+<p><img alt="Pasted image 20231024182824" src="../../../assets/Pasted%20image%2020231024182824.png"></p>
+<p><img alt="Pasted image 20231024183304" src="../../../assets/Pasted%20image%2020231024183304.png"></p></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

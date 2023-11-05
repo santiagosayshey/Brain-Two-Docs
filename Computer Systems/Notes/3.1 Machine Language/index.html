@@ -1,0 +1,1785 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../2.2%20Memory/">
+      
+      
+        <link rel="next" href="../4.1%20Computer%20Architecture/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+    
+    
+      
+        <title>3.1 Machine Language - Brain Two</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/table.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Brain Two" class="md-header__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brain Two
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3.1 Machine Language
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Ahoy!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../Home/" class="md-tabs__link">
+          
+  
+  Computer Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Brain Two" class="md-nav__button md-logo" aria-label="Brain Two" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Brain Two
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ahoy!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Computer Systems
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.1%20Boolean%20Logic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Boolean Logic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.2%20Boolean%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.2 Boolean Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20Compiler%20Code%20Generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 Compiler Code Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.1%20Signals%20%26%20Caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11.1 Signals & Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.1%20Logic%20Gates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.1 Logic Gates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.2%20Memory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2.2 Memory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    3.1 Machine Language
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hardware-elements" class="md-nav__link">
+    Hardware Elements
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware Elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    Memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processor" class="md-nav__link">
+    Processor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers" class="md-nav__link">
+    Registers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#languages" class="md-nav__link">
+    Languages
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-and-logical-operations" class="md-nav__link">
+    Arithmetic and Logical Operations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-access" class="md-nav__link">
+    Memory Access
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flow-control" class="md-nav__link">
+    Flow Control
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbols" class="md-nav__link">
+    Symbols
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hack-machine-language" class="md-nav__link">
+    Hack machine Language
+  </a>
+  
+    <nav class="md-nav" aria-label="Hack machine Language">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory_1" class="md-nav__link">
+    Memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers_1" class="md-nav__link">
+    Registers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addressing" class="md-nav__link">
+    Addressing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#branching" class="md-nav__link">
+    Branching
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+    <nav class="md-nav" aria-label="Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hack-language-specification" class="md-nav__link">
+    Hack Language Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Hack Language Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-instructions" class="md-nav__link">
+    A Instructions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-instructions" class="md-nav__link">
+    C Instructions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbols_1" class="md-nav__link">
+    Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#input-output-handling" class="md-nav__link">
+    Input / Output Handling
+  </a>
+  
+    <nav class="md-nav" aria-label="Input / Output Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#screen" class="md-nav__link">
+    Screen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyboard" class="md-nav__link">
+    Keyboard
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syntax-conversions-and-file-formats" class="md-nav__link">
+    Syntax Conversions and File Formats
+  </a>
+  
+    <nav class="md-nav" aria-label="Syntax Conversions and File Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#binary-code-files" class="md-nav__link">
+    Binary Code Files:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly-language-files" class="md-nav__link">
+    Assembly Language Files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constants-and-symbols" class="md-nav__link">
+    Constants and Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comments" class="md-nav__link">
+    Comments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whitespace" class="md-nav__link">
+    Whitespace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-conventions" class="md-nav__link">
+    Case Conventions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hack-programming" class="md-nav__link">
+    Hack Programming
+  </a>
+  
+    <nav class="md-nav" aria-label="Hack Programming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.1%20Computer%20Architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 Computer Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20Assemblers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Assemblers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.1%20Stack%20Machines%20%26%20Arithmetic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 Stack Machines & Arithmetic
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.1%20Stack%20Frames%20%26%20Function%20Handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 Stack Frames & Function Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20High%20Level%20Languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 High Level Languages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20Jack%20Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 Jack Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.1%20Compiler%20Syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 Compiler Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Past%20Papers/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Past Papers
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../Revision/Links/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Revision
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hardware-elements" class="md-nav__link">
+    Hardware Elements
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware Elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    Memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processor" class="md-nav__link">
+    Processor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers" class="md-nav__link">
+    Registers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#languages" class="md-nav__link">
+    Languages
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-and-logical-operations" class="md-nav__link">
+    Arithmetic and Logical Operations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-access" class="md-nav__link">
+    Memory Access
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flow-control" class="md-nav__link">
+    Flow Control
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbols" class="md-nav__link">
+    Symbols
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hack-machine-language" class="md-nav__link">
+    Hack machine Language
+  </a>
+  
+    <nav class="md-nav" aria-label="Hack machine Language">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory_1" class="md-nav__link">
+    Memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers_1" class="md-nav__link">
+    Registers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addressing" class="md-nav__link">
+    Addressing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#branching" class="md-nav__link">
+    Branching
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+    <nav class="md-nav" aria-label="Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hack-language-specification" class="md-nav__link">
+    Hack Language Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Hack Language Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-instructions" class="md-nav__link">
+    A Instructions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-instructions" class="md-nav__link">
+    C Instructions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbols_1" class="md-nav__link">
+    Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#input-output-handling" class="md-nav__link">
+    Input / Output Handling
+  </a>
+  
+    <nav class="md-nav" aria-label="Input / Output Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#screen" class="md-nav__link">
+    Screen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyboard" class="md-nav__link">
+    Keyboard
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syntax-conversions-and-file-formats" class="md-nav__link">
+    Syntax Conversions and File Formats
+  </a>
+  
+    <nav class="md-nav" aria-label="Syntax Conversions and File Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#binary-code-files" class="md-nav__link">
+    Binary Code Files:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly-language-files" class="md-nav__link">
+    Assembly Language Files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constants-and-symbols" class="md-nav__link">
+    Constants and Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comments" class="md-nav__link">
+    Comments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whitespace" class="md-nav__link">
+    Whitespace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-conventions" class="md-nav__link">
+    Case Conventions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hack-programming" class="md-nav__link">
+    Hack Programming
+  </a>
+  
+    <nav class="md-nav" aria-label="Hack Programming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>3.1 Machine Language</h1>
+
+<div><ul>
+<li>Machine language is a designed such that it can store machine instructions (in the form of binary)<ul>
+<li>Using those instructions,  we can tell the CPU to perform arithmetic &amp; logic operations, read / write values to and from memory, test Booleans and decide which instructions to fetch and execute</li>
+</ul>
+</li>
+</ul>
+<h2 id="overview">Overview</h2>
+<h3 id="hardware-elements">Hardware Elements</h3>
+<ul>
+<li>Machine language manipulates <em>memory</em> using a <em>processor</em> and a set of <em>registers</em></li>
+</ul>
+<h4 id="memory">Memory</h4>
+<ul>
+<li>A collection of hardware devices that store data and instructions</li>
+<li>Continuous sequence of memory registers, each having a unique address</li>
+</ul>
+<h4 id="processor">Processor</h4>
+<ul>
+<li>Performs a fixed set of operations<ul>
+<li>Arithmetic</li>
+<li>Logic</li>
+<li>Memory access</li>
+<li>Control (branching) operations</li>
+</ul>
+</li>
+<li>Draws inputs from selected registers and memory locations and writes it outputs to selected registers and memory locations</li>
+<li>Consists of ALU, set of registers, and gate logic that enables it to parse and execute instructions</li>
+</ul>
+<h4 id="registers">Registers</h4>
+<ul>
+<li>CPU and memory are implemented separately, moving data between them is slow<ul>
+<li>For this reason, CPUs have their own memory registers for high speed local memory<ul>
+<li>Include data registers and address registers (which can be interpreted as data OR addresses)</li>
+<li>When we place a bit in the address register, say <em>n</em>, causes the memory location whose address is <em>n</em> to be selected instantly</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="languages">Languages</h3>
+<ul>
+<li>Can be written two ways:<ul>
+<li>Binary</li>
+<li>Symbolic</li>
+</ul>
+</li>
+<li>Consider the operation <code>set R1 to the value of R1 + R2</code><ul>
+<li>The addition operation can be represented by <code>101011</code> </li>
+<li>Registers <code>R1</code> and <code>R2</code> represented by: <code>00001</code> and <code>00010</code> respectively</li>
+<li>From left to right, we can write a 16 bit instruction <code>1010110001000001</code> to achieve this operation</li>
+</ul>
+</li>
+<li>As you can imagine, programming like this is a nightmare. This is why we have high level languages and compilers to translate them into machine code!</li>
+</ul>
+<h3 id="instructions">Instructions</h3>
+<ul>
+<li>Registers are denoted as <code>R0, R1, etc</code></li>
+</ul>
+<h4 id="arithmetic-and-logical-operations">Arithmetic and Logical Operations</h4>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">load</span><span class="w"> </span><span class="no">R1</span><span class="p">,</span><span class="mi">17</span><span class="w">        </span><span class="c1">// R1 &lt;- 17</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nf">load</span><span class="w"> </span><span class="no">R2</span><span class="p">,</span><span class="mi">4</span><span class="w">         </span><span class="c1">// R2 -&lt; 4</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nf">add</span><span class="w"> </span><span class="no">R1</span><span class="p">,</span><span class="no">R1</span><span class="p">,</span><span class="no">R2</span><span class="w">      </span><span class="c1">// R1 -&lt; R1 + R2</span>
+</span></code></pre></div>
+<h4 id="memory-access">Memory Access</h4>
+<ul>
+<li>We use address registers to access and manipulate memory locations</li>
+<li>If we want to set a memory location 17 to value 1, we say load A,17 followed by load M,1<ul>
+<li>M in this scenario stands for memory register selected by A</li>
+</ul>
+</li>
+</ul>
+<h4 id="flow-control">Flow Control</h4>
+<ul>
+<li>Machine languages have the ability to <em>jump</em> to certain lines of code, similar to how conditional programming works in a high level language<ul>
+<li>Use <code>goto</code></li>
+</ul>
+</li>
+</ul>
+<p><img alt="figure_4.1" src="../../../assets/figure_4.1.png"></p>
+<h4 id="symbols">Symbols</h4>
+<ul>
+<li>Symbolic assembly code is much easier to write, debug and maintain</li>
+</ul>
+<h2 id="hack-machine-language">Hack machine Language</h2>
+<ul>
+<li>Processes, moves and stores chunks of 16 bit values</li>
+</ul>
+<h3 id="memory_1">Memory</h3>
+<ul>
+<li>Uses two memory units, data and instructions<ul>
+<li>Data memory stores binary values that programs manipulate</li>
+<li>Instruction memory stores the program's instructions in binary</li>
+</ul>
+</li>
+<li>Both are 16 bit wide and each has a 15 bit address space</li>
+</ul>
+<p><img alt="figure_4.2" src="../../../assets/figure_4.2.png"></p>
+<ul>
+<li>Data memory (RAM) is read / write<ul>
+<li>Supply an address to select an individual register and use <code>M=0</code> to update the selected RAM register to 0</li>
+</ul>
+</li>
+<li>Instruction memory (ROM) is read only<ul>
+<li>Supplies an address to a register which contains the current instruction</li>
+</ul>
+</li>
+</ul>
+<h3 id="registers_1">Registers</h3>
+<ul>
+<li>Instructions manipulate data, address and data memory registers (<code>D, A and M</code>)</li>
+<li>Manipulate using traditional arithmetic:</li>
+</ul>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">D</span><span class="err">=</span><span class="no">M</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nf">M</span><span class="err">=</span><span class="no">D</span><span class="err">+</span><span class="mi">1</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nf">D</span><span class="err">=</span><span class="no">M-1</span>
+</span></code></pre></div>
+<h3 id="addressing">Addressing</h3>
+<ul>
+<li>Can set the value of the A register using: <code>@number</code></li>
+<li>Can set the value of the D register using: <code>@number D=A</code></li>
+<li>Suppose we want to set the value of RAM(100) to 17, that is we want to set the value of the RAM register with address 100 to the value of 17</li>
+</ul>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="err">@17</span><span class="w">   </span><span class="c1">// store 17 in A</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nf">D</span><span class="err">=</span><span class="no">A</span><span class="w">   </span><span class="c1">// set data = A</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="err">@100</span><span class="w">  </span><span class="c1">// store 100 in A for addressing</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nf">M</span><span class="err">=</span><span class="no">D</span><span class="w">   </span><span class="c1">// set the memory register with address associated with A (100) to the data value (17)</span>
+</span></code></pre></div>
+<ul>
+<li>Set RAM(100) to the value of RAM(200)</li>
+</ul>
+<p><strong>Set of D values</strong>
+</p><div class="language-asm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="err">@200</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nf">D</span><span class="err">=</span><span class="no">M</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="err">@100</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nf">M</span><span class="err">=</span><span class="no">D</span>
+</span></code></pre></div>
+<p>This code sets the value of "M" to a variable D and assigns it to an object.</p>
+<h3 id="branching">Branching</h3>
+<ul>
+<li>What if we don't want to execute code sequentially but jump to certain parts of the code?<ul>
+<li>Can be done using:</li>
+</ul>
+</li>
+</ul>
+<p></p><div class="language-asm highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="err">@29</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="err">0</span><span class="c1">;JMP</span>
+</span></code></pre></div>
+- Selects the ROM 29 register and sets it's value to be the next instruction to be executed
+- This is called unconditional branching
+- Conditional branching, such as <code>if D==0 goto 52</code>, can be implemented as:
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="err">@52</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">D</span><span class="c1">;JEQ</span>
+</span></code></pre></div>
+<ul>
+<li>Which just means, evaluate D, if the value equals 0, jump to execute the instruction stored in ROM(@)</li>
+</ul>
+<h3 id="variables">Variables</h3>
+<ul>
+<li>
+<p>The value we put after <code>@</code> can either be a constant or a symbol
+</p><div class="language-asm highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="err">@23</span><span class="w"> </span><span class="c1">// set the value of A to 23</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="err">@513</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nf">D</span><span class="err">=</span><span class="no">A</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="err">@</span><span class="nf">x</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nf">M</span><span class="err">=</span><span class="no">D</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1">// select the RAM register whose address is the value that is bound to the symbol x, and set this register to 513</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="err">@</span><span class="nf">x</span><span class="w"> </span><span class="c1">// set the value of A to 513</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>We also have 16 dedicated Registers R0 - R15 that are always bound to their number</p>
+</li>
+</ul>
+<h5 id="examples">Examples</h5>
+<p><img alt="figure_4.3" src="../../../assets/figure_4.3.png"></p>
+<ul>
+<li>Hack assembly code to sum numbers from 1 to n</li>
+</ul>
+<p><img alt="figure_4.4" src="../../../assets/figure_4.4.png"></p>
+<ul>
+<li>Ignoring the details, we can see an emerging pattern<ul>
+<li>An instruction @value is used to select a target memory address, the subsequent instructio specifies what to do at this address<ul>
+<li>Essentially, in 2 lines, were specifying a variable and then manipulating that variable</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Two generic instructions A instructions (@) and C instructions - which compute</li>
+</ul>
+<h3 id="hack-language-specification">Hack Language Specification</h3>
+<p><img alt="figure_4.5" src="../../../assets/figure_4.5.png"></p>
+<h4 id="a-instructions">A Instructions</h4>
+<ul>
+<li>Sets the A register to some 15 bit value</li>
+<li>Used for three different purposes<ul>
+<li>Provides the only way to enter a constant value into the computer under program control</li>
+<li>Sets the stage for a following C instruction that manipulates the selected RAM register referred to as M, by first setting A to the address of that register</li>
+<li>Sets the stage for a following C instruction that specifies a jump by first setting A to the address of the jump destination</li>
+</ul>
+</li>
+</ul>
+<h4 id="c-instructions">C Instructions</h4>
+<ul>
+<li>Answers 3 questions:<ul>
+<li>What to compute (comp)<ul>
+<li>Designed to compute one function on two 16 bit inputs</li>
+<li>First input comes from D, second comes from either A (when the a-bit is 0) or from M (when the a-bit is 1)</li>
+<li>The a-bit and six c-bits comprising the comp field are used assign which function to perform on the inputs</li>
+</ul>
+</li>
+<li>Where to store the computed value (dest)<ul>
+<li>Can be stored in 0, 1, 2, or 3 possible destinations simultaneously<ul>
+<li>The first and second d-bits code whether to store the computed value in A and in D, respectively</li>
+<li>The third d-bit codes whether to store the computed value in M</li>
+<li><img alt="figure_wo_caption_4.2" src="../../../assets/Images/figure_wo_caption_4.2.png"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>What to do next (jump)<ul>
+<li>Two possibilities:<ul>
+<li>Fetch and execute the next instruction in the program, which is default</li>
+<li>Fetch and execute some other designated instruction (jumping)</li>
+</ul>
+</li>
+<li>Whether or not to jump us determined jointly by the three j bits of the instruction's jump field and by the ALU output</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="symbols_1">Symbols</h3>
+<ul>
+<li>Assembly instructions can specify locations via constants OR symbols</li>
+<li>Any sequence of letters, digits, underscores, dots, dollar signs and colons that doesn't begin with a digit</li>
+<li>Symbols fall into 3 categories:<ul>
+<li>Predefined Symbols:<ul>
+<li>Representing special memory addresses</li>
+<li><code>R0, R1, R2, etc</code><ul>
+<li>Really useful to perform operations with values from 0 -15</li>
+</ul>
+</li>
+<li><code>SP, LCL, ARG, THIS, THAT</code><ul>
+<li>Bound to 0-4 each respectively</li>
+</ul>
+</li>
+<li><code>SCREEN, KBD</code><ul>
+<li>Base addresses of the screen and keyboard memory maps (designated memory blocks)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Label Symbols<ul>
+<li>Representing destinations of go to instructions</li>
+<li>Declared using <code>xxx</code> syntax</li>
+<li>Written using uppercase letters <code>LOOP, STOP, END, etc</code></li>
+</ul>
+</li>
+<li>Variable Symbols<ul>
+<li>Representing variables</li>
+<li>Any symbol <code>xxx</code> in a program that is not predefined and is not declared elsewhere is treated as a variable</li>
+<li>Bound to a unique number starting from 16</li>
+<li>Written using lower case letters</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="input-output-handling">Input / Output Handling</h3>
+<ul>
+<li>Hack hardware can be connected to to screen / keyboard (IO devices)</li>
+<li>Interact with he computer platform via memory maps</li>
+<li>Drawing pixels on the screen is done by writing binary values into a designated memory segment associated with the screen</li>
+<li>Listening to the keyboard is done by reading a designated memory location associated with the keyboard</li>
+</ul>
+<h4 id="screen">Screen</h4>
+<ul>
+<li>Organised as 256 rows of 512 pixels per row</li>
+<li>The contents of the screen are represented by a memory map, stored in an 8k memory block of 16 bit words, known as <code>SCREEN</code> predefined symbol</li>
+</ul>
+<h4 id="keyboard">Keyboard</h4>
+<ul>
+<li>Single word memory map, known as <code>KBD</code> predefined symbol</li>
+<li>When a key is pressed on the physical keyboard, its 16 bit character code appears at RAM(KBD), defaulting to 0</li>
+</ul>
+<h3 id="syntax-conversions-and-file-formats">Syntax Conversions and File Formats</h3>
+<h4 id="binary-code-files">Binary Code Files:</h4>
+<ul>
+<li>Programs written in binary hack language have <code>.hack</code> extension</li>
+<li>Each line in the file codes a single binary execution, using a sequence of sixteen 0 and 1 characters<ul>
+<li>Taken together, all the lines in the file represent a machine language program</li>
+</ul>
+</li>
+<li>When a program is loaded into the ROM, the binary code appearing in the file’s nth line is stored at address n of the ROM, starting from 0</li>
+</ul>
+<h4 id="assembly-language-files">Assembly Language Files</h4>
+<ul>
+<li>Programs written in assembly hack language have <code>.asm</code> extension</li>
+<li>Composed of text lines, each being an A or C instruction or a label declaration <code>LOOP, END, etc</code> or comment<ul>
+<li>A label declaration is a text line of the form (symbol)</li>
+</ul>
+</li>
+</ul>
+<h4 id="constants-and-symbols">Constants and Symbols</h4>
+<ul>
+<li>The <code>xxx</code>’s in the instructions of the form <code>@xxx</code><ul>
+<li>Are unsigned values from 0 to 2^15 -1 and are written in decimal notation (thank the lord)</li>
+</ul>
+</li>
+<li>A symbol is a sequence of letters, digits, underscores, dots, dollar signs and coils that does not begin with a digit</li>
+</ul>
+<h4 id="comments">Comments</h4>
+<ul>
+<li>A text line beginning with two slashes that is ignored when executed</li>
+</ul>
+<h4 id="whitespace">Whitespace</h4>
+<ul>
+<li>Leading space characters and empty lines are ignored</li>
+</ul>
+<h4 id="case-conventions">Case Conventions</h4>
+<ul>
+<li>All assembly conventions must be written in uppercase</li>
+<li>Labels are uppercase, variables are lowercase</li>
+</ul>
+<h2 id="hack-programming">Hack Programming</h2>
+<h5 id="examples_1">Examples</h5>
+<p><img alt="figure_4.6" src="../../../assets/figure_4.6.png"></p>
+<ul>
+<li>We can see that predefined symbols can be used as working variables too</li>
+<li>
+<p>We can also see how to end these programs using <code>END</code></p>
+</li>
+<li>
+<p><code>arr[3] = -1</code></p>
+</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>@arr      // Load the base address of the array 'arr' into the A register
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>D=M       // Load the contents of the memory location (base address of 'arr') into the D register
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>@3        // Load the constant 3 into the A register
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>A=D+A     // Calculate the address of arr[3] by adding 3 to the current value in D, and store it in A
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>M=-1      // Set the contents of the memory location whose address is currently in the A register to -1
+</span></code></pre></div>
+<p><img alt="Pasted image 20230819061547" src="../../../assets/Pasted%20image%2020230819061547.png"></p>
+<p><img alt="Pasted image 20230819061606" src="../../../assets/Pasted%20image%2020230819061606.png"></p>
+<p><img alt="Pasted image 20230819061700" src="../../../assets/Pasted%20image%2020230819061700.png"></p></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
