@@ -7,7 +7,7 @@ tags: []
 
 Welcome to My Second Brain.
 
-![[giphy 1.gif]]
+![giphy](assets/giphy.gif)
 
 Inside, you'll find my detailed computer science notes covering various topics and courses from my time at the University of Adelaide. While I'm making my notes available publicly to be a resource for others, I include a necessary disclaimer:
 
