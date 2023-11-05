@@ -1,6 +1,6 @@
 # Brain Two
 
-My obsidian vault hosted using a custom MkDocs Material theme.
+My Obsidian Vault hosted using a custom MkDocs Material theme.
 ## 🛠 Built with
 
 - [MkDocs](https://www.mkdocs.org/)
@@ -17,7 +17,7 @@ My obsidian vault hosted using a custom MkDocs Material theme.
 2. Navigate to the project directory:
 
    ```bash
-   cd Dictionarry
+   cd Brain-Two-Docs
    ```
 
 3. If you want to run the site locally, install MkDocs and the Material theme:
