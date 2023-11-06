@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/Computer Systems/Home.md",
+                "file": "docs/Web and Database Computing/Project/30-5 To Do.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/Computer Systems/Home.md",
+                "file": "docs/Web and Database Computing/Project/30-5 To Do.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/Computer Systems/Home.md",
+                "file": "docs/Web and Database Computing/Project/30-5 To Do.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/Computer Systems/Home.md"
+                "file": "docs/Web and Database Computing/Project/30-5 To Do.md"
               }
             }
           }
@@ -148,42 +148,43 @@
   },
   "active": "720860fea603d6bb",
   "lastOpenFiles": [
-    "docs/Computer Systems/Past Papers/Links.md",
-    "docs/Computer Systems/Past Papers/2023 Workshop Exam.pdf",
-    "docs/Computer Systems/Past Papers/2023 Mock Exam.pdf",
-    "docs/Computer Systems/Revision/Links.md",
-    "docs/index.md",
-    "docs/Computer Systems/Past Papers",
-    "docs/Computer Systems/Home.md",
-    "docs/Computer Systems/Notes/11.1 Signals & Caching.md",
-    "docs/Computer Systems/Notes/10.1 Compiler Code Generation.md",
-    "docs/Computer Systems/Revision/Exam Revision.pdf",
-    "docs/Computer Systems/Elements Of Computing Systems.pdf",
-    "docs/Computer Systems/Revision/Week 10 Worksheet.pdf",
-    "docs/Computer Systems/Revision/Week 10 worksheet.pdf",
-    "docs/Computer Systems/Revision/Week 1.md",
-    "docs/Computer Systems/Revision/Week 2.md",
-    "docs/Computer Systems/Notes/7.1 Stack Frames & Function Handling.md",
-    "docs/Computer Systems/elements-of-computing-systems.pdf",
-    "docs/Images/Pasted image 20231017135907.png.md",
-    "docs/Images/Pasted image 20230819061547.png.md",
-    "docs/Images/figure_wo_caption_9.6.png.md",
-    "docs/Images/figure_wo_caption_8.2.png.md",
-    "docs/Images/figure_3.8.png.md",
+    "docs/Web and Database Computing/Project/Feature Details.md",
+    "docs/Web and Database Computing/Project/Milestone 1.md",
+    "docs/Web and Database Computing/Project/Research.md",
     "docs/Computer Systems/Notes/1.1 Boolean Logic.md",
-    "docs/Computer Systems/Exercises/1.2.b.md",
-    "docs/Computer Systems/Exercises/1.2.a.md",
-    "docs/Computer Systems/Exercises/Prac Exam 2 Prep.md",
-    "docs/Computer Systems/Exercises/Week 7 worksheet.pdf",
+    "docs/Web and Database Computing/Untitled.canvas",
+    "docs/Web and Database Computing/Videos/9.3 Adding MYSQL.mp4",
+    "docs/Web and Database Computing/Videos/9.2 Server Libraries & Interfaces.mp4",
+    "docs/Web and Database Computing/Videos/9.1 Authentication & Sessions.mp4",
+    "docs/Web and Database Computing/Videos/8.4 Cookies and Sessions.mp4",
+    "docs/Web and Database Computing/Videos/8.3 Express Server Architecture.mp4",
+    "docs/Web and Database Computing/Videos/8.2 Advanced HTTP Requests.mp4",
+    "docs/Web and Database Computing/Videos/8.1 HTTP & Client-Server Model.mp4",
+    "docs/Web and Database Computing/Videos/7.4 Intro to Client APIs.mp4",
+    "docs/Web and Database Computing/Videos/7.3 Vue Conditions & Events.mp4",
+    "docs/Web and Database Computing/Videos/7.2 Introduction to Vue.mp4",
+    "docs/Web and Database Computing/Quizzes/Quiz 1 - Answers.md",
+    "docs/Web and Database Computing/Project/30-5 To Do.md",
+    "docs/Web and Database Computing/Notes/9.3 Database Integeration in Web Applications.md",
+    "docs/Web and Database Computing/Notes/9.2 Server Libraries & Interfaces.md",
+    "docs/Web and Database Computing/Notes/9.1 Authentication & Sessions.md",
+    "docs/Web and Database Computing/Notes/8.4 Cookies and Sessions.md",
+    "docs/Web and Database Computing/Notes/8.3 Express Server Architecture.md",
+    "docs/Web and Database Computing/Notes/8.2 Advanced HTTP Requests.md",
+    "docs/Web and Database Computing/Notes/8.1 HTTP & Client-Server Model.md",
+    "docs/Web and Database Computing/Notes/7.4 Intro to Client APIs.md",
+    "docs/Web and Database Computing/Notes/7.3 Vue Conditionals and Events.md",
+    "docs/Web and Database Computing/Notes/7.2 Introduction to Vue.md",
+    "docs/Web and Database Computing/Notes/7.1 Client JS Frameworks.md",
+    "docs/Web and Database Computing/Notes/6.4 Semantic Elements and UI Frameworks.md",
+    "docs/Web and Database Computing/Notes/6.3 Accessibility.md",
+    "docs/Web and Database Computing/Notes/6.2 Cognitive And Kinematic Load.md",
+    "docs/Web and Database Computing/Notes/6.1 Principles of UI Design.md",
+    "docs/Web and Database Computing/Notes/5.4 Working With SQL.md",
+    "docs/Web and Database Computing/Notes/5.3 Structured Query Langauge.md",
+    "docs/Web and Database Computing/Notes/5.2 Relational Database Schemas.md",
+    "docs/Web and Database Computing/Notes/5.1 Relational Database Fundamentals.md",
     "docs/assets/Screenshot 2023-09-13 174626.png",
-    "docs/Images/Pasted image 20231017114758.png.md",
-    "docs/Computer Systems/Notes/9.1 Compiler Syntax.md",
-    "docs/Computer Systems/Notes/8.2 Jack Examples.md",
-    "docs/Computer Systems/Notes/8.1 High Level Languages.md",
-    "docs/Computer Systems/Notes/6.1 Stack Machines & Arithmetic.md",
-    "Notes/8. Stack Frames & Function Handling.md",
-    "Notes",
-    "docs/Computer Systems/Notes/5.1 Assemblers.md",
     "docs/assets/84yhci 1.jpg",
     "docs/assets/84yhci.jpg",
     "docs/assets/Images/figure_5.1.png",
